@@ -18,7 +18,6 @@ while True:
             try:
                 idVendor, idProduct = os.popen("lsusb -v | grep -i keyboard -B 4 | grep -E 'idVendor|idProduct' | grep -E -o '0x.{4}'").read().split("\n")[0:2]
                 dev = usb.core.find(idVendor=int(idVendor, 16), idProduct=int(idProduct, 16), backend=backend)
-                print dev
                 if dev is None:
                     raise ValueError('Device not found')
                 # If you didn't use the 'backend', just delete it in find()
@@ -35,18 +34,26 @@ while True:
 
         print "Found keyboard with idVendor {}, and idProduct {}".format(idVendor, idProduct)
 
+        prev_control = None
         while True:
             control = None
             try:
                 control = dev.read(endpoint.bEndpointAddress, endpoint.wMaxPacketSize, USB_TIMEOUT)
+                prev_control = control
             except Exception, e:
                 if e.errno == 19:
                     raise
 
             if control is not None:
                 print control
+            elif prev_control is not None:
+                if all(key_code == 0 for key_code in prev_control):
+                    prev_control = None
+                else:
+                    print prev_control
 
             time.sleep(0.02)
 
-    except:
+    except Exception, e:
+        print e
         print "Can not read keyboards now, retrying..."
