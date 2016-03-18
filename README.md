@@ -5,15 +5,15 @@ I really like to use my [KBP mini V60](https://www.facebook.com/media/set/?set=a
 
 When [Raspberry pi zero](https://www.raspberrypi.org/products/pi-zero/) was released, it seems to be the best choice as the central part of the adapter, but pi zero is always out of stock, so when I found [Linkit smart 7688 (Duo)](http://home.labs.mediatek.com/hello7688/?gclid=Cj0KEQjw5Z63BRCLqqLtpc6dk7gBEiQA0OuhsLLn9KMJ94rh7Wxj8knOw5i-hPy-99o40BoDHnrRvdIaAvp18P8HAQ) is easier to buy now, I then decide to use this board as the adapter, and also, the Wi-Fi on 7688 gave me some more idea to build extra function in this project. Besides, MCU on 7688 Duo can separate the code which communicates with HID Bluetooth module into MCU, and ensure no interrupts in MPU will break the communication with Bluetooth module.
 
-## Hardwares
+## Hardware
 * [Linkit Smart 7688 Duo](http://home.labs.mediatek.com/hello7688/?gclid=Cj0KEQjw5Z63BRCLqqLtpc6dk7gBEiQA0OuhsLLn9KMJ94rh7Wxj8knOw5i-hPy-99o40BoDHnrRvdIaAvp18P8HAQ)  
-	This part can be replaced with raspberry pi, banana pi, etc as long as the board supports Serial read and write, and runs an linux system on it. You can choose it by yourself(offcourse you'll like your adapter as small as possible and energy saving!).
+	This part can be replaced with raspberry pi, banana pi, etc. as long as the board supports Serial read and write, and runs an Linux system on it. You can choose it by yourself(of course you'll like your adapter as small as possible and energy saving!).
 	
 * [Bluefruit EZ-Key 12 input Bluetooth HID Keyboard Controller](https://www.adafruit.com/products/1535)  
-	This is the most expensive part, there is also some HID Bluetooth modules you can choose, so you can modify the MCU code to communicate with the bluetooth module you choose.
+	This is the most expensive part, there is also some HID Bluetooth modules you can choose, so you can modify the MCU code to communicate with the Bluetooth module you chose. Also, be aware to the ability of the module you choose, some may not support HID customer reports, or some only sends English ASCII character, not implementing key press or release with keycode.
 	
 * (optional) Arduino  
-	If you use 7688 Duo, this part is already included, but if you use raspberry pi, and want to seperate the code which communicates with bluetooth module, you'll need an Arduino.
+	If you use 7688 Duo, this part is already included, but if you use raspberry pi, and want to separate the code which communicates with Bluetooth module, you'll need an Arduino. If you don't want to use a MCU to communicate with Bluetooth module, you can encode the communication into adapter.py, but if you do so, I strongly suggest you should deal timing issue carefully.
 	
 * Battery  
 	You can use any batteries, or power bank as the power source, just make sure your board can work with it.
@@ -66,3 +66,5 @@ then you just installed the pyusb package. If you look into the adapter.py, you'
     
 This is because python in 7688 did not search the path /usr/lib, so I added manually. If your board do search this path or save libusb in other path, you should modify this part.
 
+## HID Customer reports
+This project also implemented HID customer reports(ex: the play hotkey on you keyboard), but depends on your keyboard model. I only have one keyboard with this function, and currently I am not familiar with HID customer reports function, so for some keyboard, hotkey may broken.
