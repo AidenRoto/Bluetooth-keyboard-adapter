@@ -6,7 +6,7 @@ import time
 import serial
 
 
-USB_IF, USB_TIMEOUT = 0, 5 # set usb interface and timeout
+USB_TIMEOUT = 5 # set usb timeout
 backend = usb.backend.libusb1.get_backend(find_library=lambda x: "/usr/lib/libusb-1.0.so") # set libusb path. If you didn't occur usb.core.find() error, delete this line and modify the usb.core.find() parameters
 ser = serial.Serial("/dev/ttyS0", baudrate=57600)
 
@@ -21,10 +21,18 @@ while True:
                 if dev is None:
                     raise ValueError('Device not found')
                 # If you didn't use the 'backend', just delete it in find()
-                endpoint = dev[0][(0,0)][0]
-                if dev.is_kernel_driver_active(USB_IF) is True:
-                    dev.detach_kernel_driver(USB_IF)
-                usb.util.claim_interface(dev, USB_IF)
+                endpoints = [] # Some keyboards use second interface to send HID customer reports, I am not sure purpose and usage of the third and higher interfaces, so currently only support to second interface
+                try:
+                    for i in range(2):
+                        if dev.is_kernel_driver_active(i) is True:
+                            dev.detach_kernel_driver(i)
+                        endpoints.append(dev[0][(i, 0)][0])
+                        usb.util.claim_interface(dev, i)
+                except:
+                    pass
+
+                finally:
+                    interfaces_num = len(endpoints)
 
                 print "Keyboard is ready."
                 break
@@ -34,24 +42,20 @@ while True:
 
         print "Found keyboard with idVendor {}, and idProduct {}".format(idVendor, idProduct)
 
-        prev_control = None
         while True:
-            control = None
+            controls = [None] * interfaces_num
             try:
-                control = dev.read(endpoint.bEndpointAddress, endpoint.wMaxPacketSize, USB_TIMEOUT)
-                prev_control = control
+                for i in range(interfaces_num):
+                    controls[i] = dev.read(endpoints[i].bEndpointAddress, endpoints[i].wMaxPacketSize, USB_TIMEOUT)
+
             except Exception, e:
                 if e.errno == 19:
                     raise
 
-            if control is not None:
-                print control
-            elif prev_control is not None:
-                if all(key_code == 0 for key_code in prev_control):
-                    prev_control = None
-                else:
-                    print prev_control
-
+            for control in controls:
+                if control is not None:
+                    print control
+            
             time.sleep(0.02)
 
     except Exception, e:
