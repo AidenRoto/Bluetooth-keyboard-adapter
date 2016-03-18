@@ -24,3 +24,45 @@ The main idea is this:
 
 and Linkit it smart 7688 Duo already contains the Linux system, Wi-Fi, MCU parts!
 
+## Installation
+In order to read usb, 7688 (or other board) must has the ability to read a usb device.
+
+run
+
+    $ opkg update
+    $ opkg install kmod-input-core
+    $ opkg install kmod-input-evdev
+    $ opkg install kmod-usb-hid
+    $ opkg install usbutils
+    $ opkg install libusb-1.0
+    
+to install prerequest packages. Now you're able to connect a usb keyboard, and run the command
+
+    $ lsusb
+    Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+    Bus 002 Device 005: ID 04d9:0112 Holtek Semiconductor, Inc.
+    Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+    
+and you'll found a different usb device name, that is your keyboard. Or, you can run
+
+    $ lsusb -v
+    ...
+      iManufacturer           0
+      iProduct                2 USB-HID Keyboard
+      iSerial                 0
+    ...
+    
+and if some patterns like USB-HID Keyboard, then your board is able to use the keyboard.
+
+Then clone the [pyusb](https://github.com/walac/pyusb) in github(since pip install pyusb and pip install pyusb --pre report no match version, you can clone from the repository)
+
+    $ git clone https://github.com/walac/pyusb
+    $ cd pyusb
+    $ python setup.py install
+    
+then you just installed the pyusb package. If you look into the adapter.py, you'll find that there is a weird code
+
+    backend = usb.backend.libusb1.get_backend(find_library=lambda x: "/usr/lib/libusb-1.0.so")
+    
+This is because python in 7688 did not search the path /usr/lib, so I added manually. If your board do search this path or save libusb in other path, you should modify this part.
+
