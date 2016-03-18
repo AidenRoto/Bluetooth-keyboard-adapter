@@ -9,9 +9,9 @@ import serial
 USB_IF, USB_TIMEOUT = 0, 5 # set usb interface and timeout
 backend = usb.backend.libusb1.get_backend(find_library=lambda x: "/usr/lib/libusb-1.0.so") # set libusb path. If you didn't occur usb.core.find() error, delete this line and modify the usb.core.find() parameters
 ser = serial.Serial("/dev/ttyS0", baudrate=57600)
-dev = None
 
 while True:
+    dev = None
     try:
         while dev is None:
             print "Searching keyboard..."
@@ -34,6 +34,19 @@ while True:
                 print "No keyboards found."
 
         print "Found keyboard with idVendor {}, and idProduct {}".format(idVendor, idProduct)
+
+        while True:
+            control = None
+            try:
+                control = dev.read(endpoint.bEndpointAddress, endpoint.wMaxPacketSize, USB_TIMEOUT)
+            except Exception, e:
+                if e.errno == 19:
+                    raise
+
+            if control is not None:
+                print control
+
+            time.sleep(0.02)
 
     except:
         print "Can not read keyboards now, retrying..."
