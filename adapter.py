@@ -17,10 +17,10 @@ while True:
             print "Searching keyboard..."
             try:
                 idVendor, idProduct = os.popen("lsusb -v | grep -i keyboard -B 4 | grep -E 'idVendor|idProduct' | grep -E -o '0x.{4}'").read().split("\n")[0:2]
+                # If you didn't use the 'backend', just delete it in find()
                 dev = usb.core.find(idVendor=int(idVendor, 16), idProduct=int(idProduct, 16), backend=backend)
                 if dev is None:
                     raise ValueError('Device not found')
-                # If you didn't use the 'backend', just delete it in find()
                 endpoints = [] # Some keyboards use second interface to send HID customer reports, I am not sure purpose and usage of the third and higher interfaces, so currently only support to second interface
                 try:
                     for i in range(2):
@@ -55,8 +55,10 @@ while True:
             for control in controls:
                 if control is not None:
                     print control
+                    ser.write(control)
+                    ser.write(bytearray([181]))
             
-            time.sleep(0.02)
+            time.sleep(0.05)
 
     except Exception, e:
         print e
