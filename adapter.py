@@ -58,7 +58,7 @@ while True:
                     ser.write(control)
                     ser.write(bytearray([181]))
             
-            time.sleep(0.05)
+            time.sleep(0.01)
 
     except Exception, e:
         print e
