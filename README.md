@@ -10,13 +10,16 @@ When [Raspberry pi zero](https://www.raspberrypi.org/products/pi-zero/) was rele
 	This part can be replaced with raspberry pi, banana pi, etc. as long as the board supports Serial read and write, and runs an Linux system on it. You can choose it by yourself(of course you'll like your adapter as small as possible and energy saving!).
 	
 * [Bluefruit EZ-Key 12 input Bluetooth HID Keyboard Controller](https://www.adafruit.com/products/1535)  
-	This is the most expensive part, there is also some HID Bluetooth modules you can choose, so you can modify the MCU code to communicate with the Bluetooth module you chose. Also, be aware to the ability of the module you choose, some may not support HID customer reports, or some only sends English ASCII character, not implementing key press or release with keycode.
+	This is the most expensive part, there is also some HID Bluetooth modules you can choose, so you can modify the MCU code to communicate with the Bluetooth module you chose. Also, be aware to the ability of the module you choose, some may not support HID customer reports, or some only sends English ASCII character, not implementing key press or release with keycode.  
+	I found there is another good module, [RN-42HID bluetooth module](http://twcn.rs-online.com/web/p/bluetooth-modules/8417484/), and this one can be easily retrieved from RS site. It also supports [customer report](http://cdn.sparkfun.com/datasheets/Wireless/Bluetooth/RN-HID-User-Guide-v1.0r.pdf).
+
 	
 * (optional) Arduino  
 	If you use 7688 Duo, this part is already included, but if you use raspberry pi, and want to separate the code which communicates with Bluetooth module, you'll need an Arduino. If you don't want to use a MCU to communicate with Bluetooth module, you can encode the communication into adapter.py, but if you do so, I strongly suggest you should deal timing issue carefully.
 	
 * Battery  
-	You can use any batteries, or power bank as the power source, just make sure your board can work with it.
+	You can use any batteries, or power bank as the power source, just make sure your board can work with it.  
+	I used a battery from my old cell phone, and I used [this module](http://www.icshop.com.tw/product_info.php/products_id/18032) to boost voltage to 5V(this is imoprtant, though Linkit smart 7688 Duo can operates in 3.7V, which is the original battery output voltage, but if there is another load on 7688, I found that 7688 will fail and reboot while booting.), and [this module](http://www.icshop.com.tw/product_info.php/products_id/11427) to charge the battery.
 	
 ## Block Diagram
 The main idea is this:
@@ -25,6 +28,7 @@ The main idea is this:
 and Linkit it smart 7688 Duo already contains the Linux system, Wi-Fi, MCU parts!
 
 ## Installation
+### Linux system side
 In order to read usb, 7688 (or other board) must has the ability to read a usb device.
 
 run
@@ -65,6 +69,32 @@ then you just installed the pyusb package. If you look into the adapter.py, you'
     backend = usb.backend.libusb1.get_backend(find_library=lambda x: "/usr/lib/libusb-1.0.so")
     
 This is because python in 7688 did not search the path /usr/lib, so I added manually. If your board do search this path or save libusb in other path, you should modify this part.
+
+I strongly recommend to compile the pyton script to .pyc file, for this is more fast and may cause to less power consumption.  
+To compile the python script, use the command below:
+
+    python -m py_compile adapter.py
+    
+then you'll get a adapter.pyc file, and you can run it with
+
+    python adapter.pyc
+    
+Next step, If you wish to automatically run this script after boot, add `python adapter.pyc` in `/etc/rc.local` If you use linkit smart 7688
+
+    #!/bin/bash -e
+    
+    python adapter.pyc
+    
+    exit 0
+    
+and setup `/etc/rc.local` permissions:
+
+    chmod 777 /etc/rc.local
+    
+
+
+### MCU part
+Simply burn the .ino file in this project. Now I only released the .ino file for Bluefruit EZ-Key, and convert the raw customer report from usb to the formate Bluefruit EZ-Key accept, but if you use RN-42HID, I think you can simply send the USB data to RN-42, for RN-42 uses the same formate as USB HID data.
 
 ## HID Customer reports
 This project also implemented HID customer reports(ex: the play hotkey on you keyboard), but depends on your keyboard model. I only have one keyboard with this function, and currently I am not familiar with HID customer reports function, so for some keyboard, hotkey may broken.
