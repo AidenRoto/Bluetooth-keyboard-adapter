@@ -5,6 +5,9 @@ I really like to use my [KBP mini V60](https://www.facebook.com/media/set/?set=a
 
 When [Raspberry pi zero](https://www.raspberrypi.org/products/pi-zero/) was released, it seems to be the best choice as the central part of the adapter, but pi zero is always out of stock, so when I found [Linkit smart 7688 (Duo)](http://home.labs.mediatek.com/hello7688/?gclid=Cj0KEQjw5Z63BRCLqqLtpc6dk7gBEiQA0OuhsLLn9KMJ94rh7Wxj8knOw5i-hPy-99o40BoDHnrRvdIaAvp18P8HAQ) is easier to buy now, I then decide to use this board as the adapter, and also, the Wi-Fi on 7688 gave me some more idea to build extra function in this project. Besides, MCU on 7688 Duo can separate the code which communicates with HID Bluetooth module into MCU, and ensure no interrupts in MPU will break the communication with Bluetooth module.
 
+[Watch the test video on youtube](https://www.youtube.com/watch?v=QQ94N7vuD0M)
+![](readme_img/video for adapter.png)
+
 ## Hardware
 * [Linkit Smart 7688 Duo](http://home.labs.mediatek.com/hello7688/?gclid=Cj0KEQjw5Z63BRCLqqLtpc6dk7gBEiQA0OuhsLLn9KMJ94rh7Wxj8knOw5i-hPy-99o40BoDHnrRvdIaAvp18P8HAQ)  
 	This part can be replaced with raspberry pi, banana pi, etc. as long as the board supports Serial read and write, and runs an Linux system on it. You can choose it by yourself(of course you'll like your adapter as small as possible and energy saving!).
@@ -95,6 +98,10 @@ and setup `/etc/rc.local` permissions:
 
 ### MCU part
 Simply burn the .ino file in this project. Now I only released the .ino file for Bluefruit EZ-Key, and convert the raw customer report from usb to the formate Bluefruit EZ-Key accept, but if you use RN-42HID, I think you can simply send the USB data to RN-42, for RN-42 uses the same formate as USB HID data.
+
+### Layout
+![](readme_img/layout.jpg)
+pin 3 connected to Rx on bluetooh module, pin 2 connected to Tx on bluetooth
 
 ## HID Customer reports
 This project also implemented HID customer reports(ex: the play hotkey on you keyboard), but depends on your keyboard model. I only have one keyboard with this function, and currently I am not familiar with HID customer reports function, so for some keyboard, hotkey may broken.
