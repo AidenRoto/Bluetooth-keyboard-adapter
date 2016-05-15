@@ -105,3 +105,6 @@ pin 3 connected to Rx on bluetooh module, pin 2 connected to Tx on bluetooth
 
 ## HID Customer reports
 This project also implemented HID customer reports(ex: the play hotkey on you keyboard), but depends on your keyboard model. I only have one keyboard with this function, and currently I am not familiar with HID customer reports function, so for some keyboard, hotkey may broken.
+
+## License
+The content of this project itself is licensed under the GNU General Public License
