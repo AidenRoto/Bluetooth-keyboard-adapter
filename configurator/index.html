@@ -5,12 +5,44 @@
 	<title>Keyboard Configurator</title>
 	<link rel="stylesheet" type="text/css" href="./lib/node_modules/angular-material/angular-material.css"/>
 </head>
-<body>
+<body ng-app="ConfiguratorApp" layout="column">
+	<md-toolbar layout="row" layout-align="center" flex="nogrow">
+		<h3>Keyboard Configurator</h3>
+	</md-toolbar>
+	<div flex layout="column">
+		<md-tabs md-border-bottom class="md-whiteframe-1dp" flex="noshrink">
+			<md-tab label="text config">
+				<md-content layout="column" layout-align="center" layout-padding>
+					this is the text config tab
+				</md-content>
+			</md-tab>
+			<md-tab label="100%">
+				<md-content layout="column" layout-align="center" layout-padding>
+					this is the 100% keyboard config tab
+				</md-content>
+			</md-tab>
+			<md-tab label="80%">
+				<md-content layout="column" layout-align="center" layout-padding>
+					this is the 80% keyboard config tab
+				</md-content>
+			</md-tab>
+			<md-tab label="60%">
+				<md-content layout="column" layout-align="center" layout-padding>
+					this is the 60% keyboard config tab
+				</md-content>
+			</md-tab>
+		</md-tabs>
+		<div flex="nogrow" layout="row" layout-align="center center">
+			<md-button class="md-raised">Load Config</md-button>
+			<md-button class="md-raised md-primary">Output Config</md-button>
+		</div>
+	</div>
 	
 	<!-- Script -->
 	<script type="text/javascript" src="./lib/node_modules/angular/angular.js"></script>
 	<script type="text/javascript" src="./lib/node_modules/angular-aria/angular-aria.js"></script>
 	<script type="text/javascript" src="./lib/node_modules/angular-animate/angular-animate.js"></script>
 	<script type="text/javascript" src="./lib/node_modules/angular-material/angular-material.js"></script>
+	<script type="text/javascript" src="./app/app.module.js"></script>
 </body>
 </html>
