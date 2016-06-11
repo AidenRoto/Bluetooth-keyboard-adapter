@@ -1,0 +1,23 @@
+.full.first_row {
+	margin: 5px 17px 12px 17px;
+	display: inline-block;
+}
+
+.full.main_area {
+	margin-left: 5px;
+	margin-right: 16px;
+	display: inline-block;
+}
+
+.full.center_area {
+	margin-left: 17px;
+	margin-right: 16px;
+	width: 174px;
+	display: inline-block;
+}
+
+.full.number_area {
+	margin-left: 17px;
+	margin-right: 16px;
+	display: inline-block;
+}

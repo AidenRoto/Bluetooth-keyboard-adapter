@@ -5,6 +5,7 @@
 	<title>Keyboard Configurator</title>
 	<link rel="stylesheet" type="text/css" href="./lib/node_modules/angular-material/angular-material.css"/>
 	<link rel="stylesheet" type="text/css" href="./app/shared/key/key.css"/>
+	<link rel="stylesheet" type="text/css" href="./app/component/layouts/layout.css"/>
 </head>
 <body ng-app="ConfiguratorApp" layout="column">
 	<md-toolbar layout="row" layout-align="center" flex="nogrow">
@@ -19,17 +20,17 @@
 			</md-tab>
 			<md-tab label="100%">
 				<md-content layout="column" layout-align="center" layout-padding>
-					this is the 100% keyboard config tab
+					<full-layout></full-layout>
 				</md-content>
 			</md-tab>
 			<md-tab label="80%">
 				<md-content layout="column" layout-align="center" layout-padding>
-					this is the 80% keyboard config tab
+					<eighty-layout></eighty-layout>
 				</md-content>
 			</md-tab>
 			<md-tab label="60%">
 				<md-content layout="column" layout-align="center" layout-padding>
-					this is the 60% keyboard config tab
+					<sixty-layout></sixty-layout>
 				</md-content>
 			</md-tab>
 		</md-tabs>
@@ -46,5 +47,6 @@
 	<script type="text/javascript" src="./lib/node_modules/angular-material/angular-material.js"></script>
 	<script type="text/javascript" src="./app/app.module.js"></script>
 	<script type="text/javascript" src="./app/shared/key/key.js"></script>
+	<script type="text/javascript" src="./app/component/layouts/layouts.js"></script>
 </body>
 </html>

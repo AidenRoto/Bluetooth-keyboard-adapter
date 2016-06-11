@@ -32,7 +32,34 @@
 	min-width: 46px;
 	background-color: white;
 	margin: 2px 4px 8px 4px;
-	font-size: 1.8em;
+	font-size: 1.3em;
 	white-space: pre-wrap;
 }
 
+.size_1p25 .key.outer {
+	width: 68px;
+}
+
+.size_1p5 .key.outer {
+	width: 85px;
+}
+
+.size_1p75 .key.outer {
+	width: 104px;
+}
+
+.size_2 .key.outer {
+	width: 114px;
+}
+
+.size_2p25 .key.outer {
+	width: 124px;
+}
+
+.size_2p75 .key.outer {
+	width: 162px;
+}
+
+.size_space .key.outer {
+	width: 378px;
+}
