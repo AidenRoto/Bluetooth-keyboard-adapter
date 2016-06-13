@@ -27,7 +27,7 @@ The main idea is this:
 
 ## Installation
 ### Install USB Host Shield Library
-Just do the [installation process in your arduino IDE](https://www.arduino.cc/en/Guide/Libraries), and install [this library](https://github.com/felis/USB_Host_Shield_2.0)  
+Just do the [installation process in your arduino IDE](https://www.arduino.cc/en/Guide/Libraries), and install [usb library](https://github.com/felis/USB_Host_Shield_2.0), then install [lightweight lowe power arduino library](http://www.rocketscream.com/blog/2011/07/04/lightweight-low-power-arduino-library/)  
 
 Then copy these two files into the usb host shiled library directory:
 
@@ -69,6 +69,16 @@ btKeyboard.ino is the interface that I made for users to customize the behavior 
 ## Default Key Settings
 In this version, I do not provide any settings for users, but will add customize key definition and customize macro setting tools in the next version.  
 The only macro I implemented in btKeyboard.ino is hold **r**, **s**, **t** (note that order does matter, and you have to hold them until you press the last t), then release these thess keys, your bluefruit will do the re-pair process.
+
+## Power Control
+In this version, I added an arduino power control library, and turn off the following modules:
+
+* ADC: this project requires no analog to digital or digital to analog.
+* Timer2: timer2 is used for PWM.
+* Timer1: timer1 is used for Servo library
+* TWI
+
+If you want to save more power, you can consider to [build your barebone arduino](https://www.youtube.com/watch?v=sNIMCdVOHOM).
 
 ## License
 The content of this project itself is licensed under the GNU General Public License
