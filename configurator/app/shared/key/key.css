@@ -4,9 +4,10 @@
 	border-width: 1px;
 	border-style: solid;
 	border-color: rgb(170, 170, 170);
-	min-width: 54px;
-	min-height: 54px;
+	width: 44px;
+	height: 54px;
 	background-color: rgb(200, 200, 200);
+	padding: 2px 4px 0px 4px;
 }
 
 .key.outer.not_selected:hover {
@@ -29,37 +30,36 @@
 	border-style: solid;
 	border-color: rgb(190, 190, 190);
 	min-height: 41px;
-	min-width: 46px;
+	min-width: 36px;
 	background-color: white;
-	margin: 2px 4px 8px 4px;
-	font-size: 1.3em;
+	font-size: 0.5em;
 	white-space: pre-wrap;
 }
 
 .size_1p25 .key.outer {
-	width: 68px;
+	width: 57px;
 }
 
 .size_1p5 .key.outer {
-	width: 85px;
+	width: 71px;
 }
 
 .size_1p75 .key.outer {
-	width: 104px;
+	width: 80px;
 }
 
 .size_2 .key.outer {
-	width: 114px;
+	width: 98px;
 }
 
 .size_2p25 .key.outer {
-	width: 124px;
+	width: 116px;
 }
 
 .size_2p75 .key.outer {
-	width: 162px;
+	width: 134px;
 }
 
 .size_space .key.outer {
-	width: 378px;
+	width: 331px;
 }
