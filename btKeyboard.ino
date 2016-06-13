@@ -1,4 +1,5 @@
 #include <btHIDBoot.h>
+#include <LowPower.h>
 #include <SoftwareSerial.h>
 #include <SPI.h>
 
@@ -58,8 +59,8 @@ void setup() {
   delay(200);
 
   next_time = millis() + 5000;
-
   HidKeyboard.SetReportParser(0, (HIDReportParser*)&Prs);
+  LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER2_OFF, TIMER1_OFF, TIMER0_ON, SPI_ON, USART0_ON, TWI_OFF);
 }
 
 void loop() {
