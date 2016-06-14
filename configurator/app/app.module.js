@@ -7,9 +7,8 @@ angular.module("ConfiguratorApp", [ "ngMaterial", "Key", "Layouts" ])
 	.controller("appCtrl", function($scope) {
 		$scope.init_app = function() {
 			document.onkeydown = function(e) {
-				// broadcast keycode to every controller, and controller will do the map process to find the key
 				event.preventDefault();
-				console.log(e.code);
+				$scope.$broadcast("keyPress", e.code);
 			}
 		}
 	})
