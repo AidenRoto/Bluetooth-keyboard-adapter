@@ -66,9 +66,14 @@ btKeyboard.ino is the interface that I made for users to customize the behavior 
 | 5V      | Vin              |      |
 | GND     | GND              |      |
 
-## Default Key Settings
-In this version, I do not provide any settings for users, but will add customize key definition and customize macro setting tools in the next version.  
+## Key Settings
+In this version, I provided an configurator for remapping keys, but no macro configuration tools. 
 The only macro I implemented in btKeyboard.ino is hold **r**, **s**, **t** (note that order does matter, and you have to hold them until you press the last t), then release these thess keys, your bluefruit will do the re-pair process.
+
+## Configurator
+![](readme_img/configurator.png)
+To use this configurator, open the file **index.html** in the directory "configurator".  
+You can click any key, and the press the corresponding key you wish to remap to. Then press "OUTPUT CONFIG", replace these two arrays appears at bottom, and burn onto your arduino.
 
 ## Consumer Report
 In this version, the keyboard adapter can not get the original consumer report from keyboard, but can define other keys to send consumer report. In the default settings in btKeyboard.ino file:
