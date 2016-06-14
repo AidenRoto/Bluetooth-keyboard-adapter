@@ -14,14 +14,44 @@ SoftwareSerial BT = SoftwareSerial(btRx, btTx);
 
 class BtKeyboardParser : public BtKeyboardReportParser {
     uint8_t map_table[102] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 129, 130, 131, 132, 133, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0 };
-    uint8_t modifier_table[7] = { 0, 0, 0, 0, 0, 0, 0 };
+    uint8_t modifier_table[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     bool send_consumer_report = false;
     void modify_read_buffer(uint8_t buf[]);
     void modify_to_consumer_report(uint8_t buf[], uint8_t report_code);
+    void modify_modifier(uint8_t buf[], uint8_t modifier);
   protected:
     void OnKeyDown(uint8_t mod, uint8_t key, uint8_t buf[]);
     void OnKeyUp(uint8_t mod, uint8_t key, uint8_t buf[]);
 };
+
+void BtKeyboardParser::modify_modifier(uint8_t buf[], uint8_t modifier) {
+  switch(modifier) {
+    case 224:
+      buf[0] += 1;
+      break;
+    case 225:
+      buf[0] += 2;
+      break;
+    case 226:
+      buf[0] += 4;
+      break;
+    case 227:
+      buf[0] += 8;
+      break;
+    case 228:
+      buf[0] += 16;
+      break;
+    case 229:
+      buf[0] += 32;
+      break;
+    case 230:
+      buf[0] += 64;
+      break;
+    case 231:
+      buf[0] += 128;
+      break;
+  }
+}
 
 void BtKeyboardParser::modify_to_consumer_report(uint8_t buf[], uint8_t report_code) {
   buf[0] = 0;
@@ -66,19 +96,25 @@ void BtKeyboardParser::modify_to_consumer_report(uint8_t buf[], uint8_t report_c
 void BtKeyboardParser::modify_read_buffer(uint8_t buf[]) { 
   uint8_t counter = 7;
   uint8_t modifier = buf[0];
-  uint8_t new_modifier = 0;
   for(int i = 128; i > 0; i /= 2) {
     if(modifier >= i) {
       modifier -= i;
       // check modifier_table[counter] need to be modified
       if(modifier_table[counter] != 0) {
         if(modifier_table[counter] <= 101) { // if the re-map key is normal key
-          
+          buf[0] -= i;
+          for(int j = 2; j < 8; ++j) {
+            if(buf[j] == 0) {
+              buf[j] = modifier_table[counter];
+              break;
+            }
+          }
         } else if(modifier_table[counter] <= 133) { // if the re-map key is consumer report 
           modify_to_consumer_report(buf, map_table[buf[i]]);
           return;
         } else { // the remap key is another modifier key
-          
+          buf[0] -= i;
+          modify_modifier(buf, modifier_table[counter]);
         }
       }
     }
@@ -94,7 +130,13 @@ void BtKeyboardParser::modify_read_buffer(uint8_t buf[]) {
         modify_to_consumer_report(buf, map_table[buf[i]]);
         return;
       } else { // if the re-map key is modifier key
-        
+        modify_modifier(buf, map_table[buf[i]]);
+        // move rest keys to front
+        buf[i] = 0;
+        for(int j = i+1; j < 8; ++j) {
+          buf[j-1] = buf[j];
+          buf[j] = 0;
+        }
       }
     }
   }
