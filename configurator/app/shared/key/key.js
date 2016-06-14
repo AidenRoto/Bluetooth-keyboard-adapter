@@ -1,4 +1,4 @@
-angular.module("Key", [ "ngMaterial" ])
+angular.module("Key", ["ngMaterial"])
 	.directive("key", function() {
 		return {
 			restrict: "E",
@@ -12,13 +12,13 @@ angular.module("Key", [ "ngMaterial" ])
 				}
 
 				$scope.click_key = function() {
-					if(!$scope.selected)
+					if (!$scope.selected)
 						$scope.$emit("selectEvnt", $scope.keyObj);
 					$scope.selected = !$scope.selected;
 				}
 
 				$scope.$on("keyPress", function(e, code) {
-					if($scope.selected) {
+					if ($scope.selected) {
 						$scope.keyObj = keyboardDataService.transform_to_input_code(code);
 						$scope.$apply();
 					}
@@ -29,7 +29,7 @@ angular.module("Key", [ "ngMaterial" ])
 				});
 
 				$scope.$on("setConsumerKey", function(e, keyObj) {
-					if($scope.selected) {
+					if ($scope.selected) {
 						$scope.keyObj = keyObj;
 						$scope.$apply();
 					}
@@ -145,7 +145,7 @@ angular.module("Key", [ "ngMaterial" ])
 			"Numpad0": new KeyDaturm("0", 98, false),
 			"NumpadDecimal": new KeyDaturm(".", 99, false),
 			"ContextMenu": new KeyDaturm("menu", 101, false),
-			"VolumeUp": new KeyDaturm("🔈+", 128),
+			"VolumeUp": new KeyDaturm("🔈+", 128, false),
 			"VolumeDown": new KeyDaturm("🔈-", 129, false),
 			"ConsumerHome": new KeyDaturm("🏠", 130, false),
 			"Search": new KeyDaturm("🔍", 131, false),
@@ -162,7 +162,64 @@ angular.module("Key", [ "ngMaterial" ])
 		};
 
 		var custom_settings = [
+			key_data["None"],
+			key_data["None"],
+			key_data["None"],
+			key_data["None"],
+			key_data["KeyA"],
+			key_data["KeyB"],
+			key_data["KeyC"],
+			key_data["KeyD"],
+			key_data["KeyE"],
+			key_data["KeyF"],
+			key_data["KeyG"],
+			key_data["KeyH"],
+			key_data["KeyI"],
+			key_data["KeyJ"],
+			key_data["KeyK"],
+			key_data["KeyL"],
+			key_data["KeyM"],
+			key_data["KeyN"],
+			key_data["KeyO"],
+			key_data["KeyP"],
+			key_data["KeyQ"],
+			key_data["KeyR"],
+			key_data["KeyS"],
+			key_data["KeyT"],
+			key_data["KeyU"],
+			key_data["KeyV"],
+			key_data["KeyW"],
+			key_data["KeyX"],
+			key_data["KeyY"],
+			key_data["KeyZ"],
+			key_data["Digit1"],
+			key_data["Digit2"],
+			key_data["Digit3"],
+			key_data["Digit4"],
+			key_data["Digit5"],
+			key_data["Digit6"],
+			key_data["Digit7"],
+			key_data["Digit8"],
+			key_data["Digit9"],
+			key_data["Digit0"],
+			key_data["Enter"],
 			key_data["Escape"],
+			key_data["Backspace"],
+			key_data["Tab"],
+			key_data["Space"],
+			key_data["Minus"],
+			key_data["Equal"],
+			key_data["BracketLeft"],
+			key_data["BracketRight"],
+			key_data["Backslash"],
+			key_data["None"],
+			key_data["Semicolon"],
+			key_data["Quote"],
+			key_data["Backquote"],
+			key_data["Comma"],
+			key_data["Period"],
+			key_data["Slash"],
+			key_data["CapsLock"],
 			key_data["F1"],
 			key_data["F2"],
 			key_data["F3"],
@@ -178,94 +235,43 @@ angular.module("Key", [ "ngMaterial" ])
 			key_data["PrintScreen"],
 			key_data["ScrollLock"],
 			key_data["Pause"],
-			key_data["Backquote"],
-			key_data["Digit1"],
-			key_data["Digit2"],
-			key_data["Digit3"],
-			key_data["Digit4"],
-			key_data["Digit5"],
-			key_data["Digit6"],
-			key_data["Digit7"],
-			key_data["Digit8"],
-			key_data["Digit9"],
-			key_data["Digit0"],
-			key_data["Minus"],
-			key_data["Equal"],
-			key_data["Backspace"],
 			key_data["Insert"],
 			key_data["Home"],
 			key_data["PageUp"],
+			key_data["Delete"],
+			key_data["End"],
+			key_data["PageDown"],
+			key_data["ArrowRight"],
+			key_data["ArrowLeft"],
+			key_data["ArrowDown"],
+			key_data["ArrowUp"],
 			key_data["NumLock"],
 			key_data["NumpadDivide"],
 			key_data["NumpadMultiply"],
 			key_data["NumpadSubtract"],
-			key_data["Tab"],
-			key_data["KeyQ"],
-			key_data["KeyW"],
-			key_data["KeyE"],
-			key_data["KeyR"],
-			key_data["KeyT"],
-			key_data["KeyY"],
-			key_data["KeyU"],
-			key_data["KeyI"],
-			key_data["KeyO"],
-			key_data["KeyP"],
-			key_data["BracketLeft"],
-			key_data["BracketRight"],
-			key_data["Backslash"],
-			key_data["Delete"],
-			key_data["End"],
-			key_data["PageDown"],
-			key_data["Numpad7"],
-			key_data["Numpad8"],
-			key_data["Numpad9"],
-			key_data["CapsLock"],
-			key_data["KeyA"],
-			key_data["KeyS"],
-			key_data["KeyD"],
-			key_data["KeyF"],
-			key_data["KeyG"],
-			key_data["KeyH"],
-			key_data["KeyJ"],
-			key_data["KeyK"],
-			key_data["KeyL"],
-			key_data["Semicolon"],
-			key_data["Quote"],
-			key_data["Enter"],
-			key_data["Numpad4"],
-			key_data["Numpad5"],
-			key_data["Numpad6"],
-			key_data["ShiftLeft"],
-			key_data["KeyZ"],
-			key_data["KeyX"],
-			key_data["KeyC"],
-			key_data["KeyV"],
-			key_data["KeyB"],
-			key_data["KeyN"],
-			key_data["KeyM"],
-			key_data["Comma"],
-			key_data["Period"],
-			key_data["Slash"],
-			key_data["ShiftRight"],
-			key_data["ArrowUp"],
+			key_data["NumpadAdd"],
+			key_data["NumpadEnter"],
 			key_data["Numpad1"],
 			key_data["Numpad2"],
 			key_data["Numpad3"],
-			key_data["ControlLeft"],
-			key_data["OSLeft"],
-			key_data["AltLeft"],
-			key_data["Space"],
-			key_data["AltRight"],
-			key_data["OSRight"],
-			key_data["ContextMenu"],
-			key_data["ControlRight"],
-			key_data["ArrowLeft"],
-			key_data["ArrowDown"],
-			key_data["ArrowRight"],
+			key_data["Numpad4"],
+			key_data["Numpad5"],
+			key_data["Numpad6"],
+			key_data["Numpad7"],
+			key_data["Numpad8"],
+			key_data["Numpad9"],
 			key_data["Numpad0"],
 			key_data["NumpadDecimal"],
-			key_data["NumpadAdd"],
-			key_data["NumpadEnter"],
+			key_data["None"],
+			key_data["ContextMenu"],
+			key_data["ControlLeft"],
+			key_data["ShiftLeft"],
+			key_data["AltLeft"],
+			key_data["OSLeft"],
+			key_data["ControlRight"],
+			key_data["ShiftRight"],
+			key_data["AltRight"],
+			key_data["OSRight"],
 		];
 
 		var consumer_data = [
@@ -278,8 +284,11 @@ angular.module("Key", [ "ngMaterial" ])
 		];
 
 		return {
-			transform_to_input_code: function(keycode) { return key_data[keycode]; },
-			get_custom_settings: function() { return custom_settings; },
-			get_consumer_data: function() { return consumer_data; },
+			transform_to_input_code: function(keycode) {
+				return key_data[keycode]; },
+			get_custom_settings: function() {
+				return custom_settings; },
+			get_consumer_data: function() {
+				return consumer_data; },
 		}
 	})
