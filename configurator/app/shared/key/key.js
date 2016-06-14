@@ -12,14 +12,20 @@ angular.module("Key", [ "ngMaterial" ])
 				}
 
 				$scope.click_key = function() {
+					if(!$scope.selected)
+						$scope.$emit("selectEvnt");
 					$scope.selected = !$scope.selected;
 				}
 
 				$scope.$on("keyPress", function(e, code) {
 					if($scope.selected) {
-						console.log(code);
-						console.log(keyboardDataService.transform_to_input_code(code));
+						$scope.keyObj = keyboardDataService.transform_to_input_code(code);
+						$scope.$apply();
 					}
+				});
+
+				$scope.$on("unselect", function(e) {
+					$scope.selected = false;
 				})
 			}
 		}
