@@ -13,9 +13,14 @@
 	</md-toolbar>
 	<div flex layout="column" layout-align="center center">
 		<full-layout></full-layout>
-		<div flex="nogrow" layout="row" layout-align="center center">
+		<div flex="nogrow" layout="column" layout-align="center center" class="layout-padding">
 			<!-- <md-button class="md-raised">Load Config</md-button> -->
 			<md-button class="md-raised md-primary" ng-click="output()">Output Config</md-button>
+			<div ng-show="map_table">
+				<h3>Please replace these two arrays in the class "BtKeyboardParser" in file "btKeybaord.ino", then burn onto your arduino.</h3>
+				{{map_table}} <br />
+				{{modifier_table}}
+			</div>
 		</div>
 	</div>
 	

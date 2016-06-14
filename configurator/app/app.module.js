@@ -16,22 +16,22 @@ angular.module("ConfiguratorApp", [ "ngMaterial", "Key", "Layouts" ])
 			var ori_settings = keyboardDataService.get_ori_settings();
 			var custom_settings = keyboardDataService.get_custom_settings();
 
-			var map_table = "uint8_t map_table[102] = { ";
+			$scope.map_table = "uint8_t map_table[102] = { ";
 			for(var i = 0; i <= 101; ++i) {
 				if(ori_settings[i].hid_code == custom_settings[i].hid_code)
-					map_table += " 0,";
+					$scope.map_table += " 0,";
 				else
-					map_table += " " + custom_settings[i].hid_code + ",";
+					$scope.map_table += " " + custom_settings[i].hid_code + ",";
 			}
-			map_table += " };";
+			$scope.map_table += " };";
 
-			var modifier_table = "uint8_t modifier_table[8] = {";
+			$scope.modifier_table = "uint8_t modifier_table[8] = {";
 			for(var i = 102; i < 110; ++i) {
 				if(ori_settings[i].hid_code == custom_settings[i].hid_code)
-					modifier_table += " 0,";
+					$scope.modifier_table += " 0,";
 				else
-					modifier_table += " " + custom_settings[i].hid_code + ",";
+					$scope.modifier_table += " " + custom_settings[i].hid_code + ",";
 			}
-			modifier_table += " };";
+			$scope.modifier_table += " };";
 		}
 	})
