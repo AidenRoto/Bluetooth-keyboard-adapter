@@ -1,110 +1,98 @@
 # Bluetooth-keyboard-adapter
-This project is based on Linkit smart 7688 Duo board, but is compatible with other boards with some modifications.
+This project is based from arduino nano broad, and is evolved from the old project which is based from linkit smart 7688 duo, you can still find the old project in the 'linkit\_smart\_7688\_duo\_version' directory.
 
 I really like to use my [KBP mini V60](https://www.facebook.com/media/set/?set=a.870489189643222.1073741835.316701428355337&type=3) mechanical keyboard, And I've wondered is there a Bluetooth adapter that can enhance this keyboard into a Bluetooth wireless keyboard. There are some products like [ATEN CS533](http://www.aten.com.tw/products/手持式裝置週邊與USB/TapUSB轉Bluetooth鍵盤滑鼠切換器/~CS533.html#.Vujzw8eLTcY), but there are issues saying that they are not compatible with some mechanical keyboards, so I decided to build my own Bluetooth keyboard adapter.
 
-When [Raspberry pi zero](https://www.raspberrypi.org/products/pi-zero/) was released, it seems to be the best choice as the central part of the adapter, but pi zero is always out of stock, so when I found [Linkit smart 7688 (Duo)](http://home.labs.mediatek.com/hello7688/?gclid=Cj0KEQjw5Z63BRCLqqLtpc6dk7gBEiQA0OuhsLLn9KMJ94rh7Wxj8knOw5i-hPy-99o40BoDHnrRvdIaAvp18P8HAQ) is easier to buy now, I then decide to use this board as the adapter, and also, the Wi-Fi on 7688 gave me some more idea to build extra function in this project. Besides, MCU on 7688 Duo can separate the code which communicates with HID Bluetooth module into MCU, and ensure no interrupts in MPU will break the communication with Bluetooth module.
+## Hardwares
+* [Arduino boards](https://www.arduino.cc/)  
+The board I used is [Arduino nano](https://www.arduino.cc/en/Main/ArduinoBoardNano)
+![](https://www.arduino.cc/en/uploads/Main/ArduinoNanoFront_3_lg.jpg)
+The reason why I used it is because I will use an [arduino usb host shiled]() (list below), and I want to integrate them into my keyboard, so the smaller the better. You may ask why I don't use [arduino pro mini](https://www.arduino.cc/en/Main/ArduinoBoardProMini) with [arduino pro mini usb host shield](https://www.circuitsathome.com/products-page/arduino-shields/usb-host-shield-for-arduino-pro-mini), it is because the pro mini and mini shiled I bought is very weird ([here](https://github.com/felis/USB_Host_Shield_2.0/issues/239) is the thread I talked with the developer), so I gave up at last.
 
-[Watch the test video on youtube](https://www.youtube.com/watch?v=QQ94N7vuD0M)
-![](readme_img/video for adapter.png)
+* [Arduino usb host shiled](https://www.circuitsathome.com/products-page/arduino-shields)  
+![](https://camo.githubusercontent.com/705fb76e24f666e97bab97272c7f7f8f28a641f7/687474703a2f2f73686f702e746b6a656c656374726f6e6963732e646b2f696d616765732f5553425f486f73745f536869656c64312e6a7067)
 
-## Hardware
-* [Linkit Smart 7688 Duo](http://home.labs.mediatek.com/hello7688/?gclid=Cj0KEQjw5Z63BRCLqqLtpc6dk7gBEiQA0OuhsLLn9KMJ94rh7Wxj8knOw5i-hPy-99o40BoDHnrRvdIaAvp18P8HAQ)  
-	This part can be replaced with raspberry pi, banana pi, etc. as long as the board supports Serial read and write, and runs an Linux system on it. You can choose it by yourself(of course you'll like your adapter as small as possible and energy saving!).
-	
 * [Bluefruit EZ-Key 12 input Bluetooth HID Keyboard Controller](https://www.adafruit.com/products/1535)  
-	This is the most expensive part, there is also some HID Bluetooth modules you can choose, so you can modify the MCU code to communicate with the Bluetooth module you chose. Also, be aware to the ability of the module you choose, some may not support HID customer reports, or some only sends English ASCII character, not implementing key press or release with keycode.  
+![](https://cdn-shop.adafruit.com/970x728/1535-00.jpg)
+This is the most expensive part, there is also some HID Bluetooth modules you can choose, so you can modify the MCU code to communicate with the Bluetooth module you chose. Also, be aware to the ability of the module you choose, some may not support HID customer reports, or some only sends English ASCII character, not implementing key press or release with keycode.  
 	I found there is another good module, [RN-42HID bluetooth module](http://twcn.rs-online.com/web/p/bluetooth-modules/8417484/), and this one can be easily retrieved from RS site. It also supports [customer report](http://cdn.sparkfun.com/datasheets/Wireless/Bluetooth/RN-HID-User-Guide-v1.0r.pdf).
-
-	
-* (optional) Arduino  
-	If you use 7688 Duo, this part is already included, but if you use raspberry pi, and want to separate the code which communicates with Bluetooth module, you'll need an Arduino. If you don't want to use a MCU to communicate with Bluetooth module, you can encode the communication into adapter.py, but if you do so, I strongly suggest you should deal timing issue carefully.
 	
 * Battery  
-	You can use any batteries, or power bank as the power source, just make sure your board can work with it.  
-	I used a battery from my old cell phone, and I used [this module](http://www.icshop.com.tw/product_info.php/products_id/18032) to boost voltage to 5V(this is imoprtant, though Linkit smart 7688 Duo can operates in 3.7V, which is the original battery output voltage, but if there is another load on 7688, I found that 7688 will fail and reboot while booting.), and [this module](http://www.icshop.com.tw/product_info.php/products_id/11427) to charge the battery.
-	
+You can use any batteries, or power bank as the power source, just make sure your board can work with it.  
+I used a battery from my old cell phone, and I used [this module](http://www.icshop.com.tw/product_info.php/products_id/18032) to boost voltage to 5V, and [this module](http://www.icshop.com.tw/product_info.php/products_id/11427) to charge the battery.
+
 ## Block Diagram
 The main idea is this:
 ![](readme_img/main_idea.png)
 
-and Linkit it smart 7688 Duo already contains the Linux system, Wi-Fi, MCU parts!
-
 ## Installation
-### Linux system side
-In order to read usb, 7688 (or other board) must has the ability to read a usb device.
+### Install USB Host Shield Library
+Just do the [installation process in your arduino IDE](https://www.arduino.cc/en/Guide/Libraries), and install [usb library](https://github.com/felis/USB_Host_Shield_2.0), then install [lightweight lowe power arduino library](http://www.rocketscream.com/blog/2011/07/04/lightweight-low-power-arduino-library/)  
 
-run
+Then copy these two files into the usb host shiled library directory:
 
-    $ opkg update
-    $ opkg install kmod-input-core
-    $ opkg install kmod-input-evdev
-    $ opkg install kmod-usb-hid
-    $ opkg install usbutils
-    $ opkg install libusb-1.0
+* btHIDBoot.h
+* btHIDBoot.cpp
+
+In OSX, this directory is ususally at:
+
+    ~/Documents/Arduino/libraries/USB_Host_Shield_Library_2.0
     
-to install prerequest packages. Now you're able to connect a usb keyboard, and run the command
+and in Windows, this directory is usually at:
 
-    $ lsusb
-    Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-    Bus 002 Device 005: ID 04d9:0112 Holtek Semiconductor, Inc.
-    Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+    My Documents\Arduino\libraries\USB_Host_Shield_Library_2.0
     
-and you'll found a different usb device name, that is your keyboard. Or, you can run
+### burn the btKeyboard.ino into your arduino
+Open btKeyboard.ino with your arduino IDE, and burn it into your arduino board.  
+btKeyboard.ino is the interface that I made for users to customize the behavior after receiving the keyboard down or up events.
 
-    $ lsusb -v
-    ...
-      iManufacturer           0
-      iProduct                2 USB-HID Keyboard
-      iSerial                 0
-    ...
-    
-and if some patterns like USB-HID Keyboard, then your board is able to use the keyboard.
+### Pin Connections
 
-Then clone the [pyusb](https://github.com/walac/pyusb) in github(since pip install pyusb and pip install pyusb --pre report no match version, you can clone from the repository)
+* To connect the USB host shield, you should connect these pins:
+	* 5V
+	* 3.3V
+	* 10 (SS)
+	* 11 (MISO)
+	* 12 (MOSI)
+	* 13 (SCK)
 
-    $ git clone https://github.com/walac/pyusb
-    $ cd pyusb
-    $ python setup.py install
-    
-then you just installed the pyusb package. If you look into the adapter.py, you'll find that there is a weird code
+* To connect the bluefruit ez-key module, you should connect these pins:
 
-    backend = usb.backend.libusb1.get_backend(find_library=lambda x: "/usr/lib/libusb-1.0.so")
-    
-This is because python in 7688 did not search the path /usr/lib, so I added manually. If your board do search this path or save libusb in other path, you should modify this part.
+| Arduino | bluefruit ez-key | Note |
+|---------|------------------|------|
+| 2       | Tx               |      |
+| 3       | Rx               |      |
+| 4       | PB               | This pin is for re-pairing from arduino, you can drop this pin and do the re-pair by press the button on bluefruit module|
+| 5V      | Vin              |      |
+| GND     | GND              |      |
 
-I strongly recommend to compile the pyton script to .pyc file, for this is more fast and may cause to less power consumption.  
-To compile the python script, use the command below:
+## Default Key Settings
+In this version, I do not provide any settings for users, but will add customize key definition and customize macro setting tools in the next version.  
+The only macro I implemented in btKeyboard.ino is hold **r**, **s**, **t** (note that order does matter, and you have to hold them until you press the last t), then release these thess keys, your bluefruit will do the re-pair process.
 
-    python -m py_compile adapter.py
-    
-then you'll get a adapter.pyc file, and you can run it with
+## Consumer Report
+In this version, the keyboard adapter can not get the original consumer report from keyboard, but can define other keys to send consumer report. In the default settings in btKeyboard.ino file:
 
-    python adapter.pyc
-    
-Next step, If you wish to automatically run this script after boot, add `python adapter.pyc` in `/etc/rc.local` If you use linkit smart 7688
+| Original Key | Maped to Consumer Report |
+|--------------|--------------------------|
+| F1           | Volume Up                |
+| F2           | Volume Down              |
+| F3           | Home                     |
+| F4           | Search                   |
+| F5           | Play/Pause               |
+| F6           | Stop                     |
 
-    #!/bin/bash -e
-    
-    python adapter.pyc
-    
-    exit 0
-    
-and setup `/etc/rc.local` permissions:
+and In the feature, there will be a more convenient configure interface. Any one wants to implement another key map, or to support some consumer report that bluefruit do not have should modify the 
 
-    chmod 777 /etc/rc.local
-    
+## Power Control
+In this version, I added an arduino power control library, and turn off the following modules:
 
+* ADC: this project requires no analog to digital or digital to analog.
+* Timer2: timer2 is used for PWM.
+* Timer1: timer1 is used for Servo library
+* TWI
 
-### MCU part
-Simply burn the .ino file in this project. Now I only released the .ino file for Bluefruit EZ-Key, and convert the raw customer report from usb to the formate Bluefruit EZ-Key accept, but if you use RN-42HID, I think you can simply send the USB data to RN-42, for RN-42 uses the same formate as USB HID data.
-
-### Layout
-![](readme_img/layout.jpg)
-pin 3 connected to Rx on bluetooh module, pin 2 connected to Tx on bluetooth
-
-## HID Customer reports
-This project also implemented HID customer reports(ex: the play hotkey on you keyboard), but depends on your keyboard model. I only have one keyboard with this function, and currently I am not familiar with HID customer reports function, so for some keyboard, hotkey may broken.
+If you want to save more power, you can consider to [build your barebone arduino](https://www.youtube.com/watch?v=sNIMCdVOHOM).
 
 ## License
 The content of this project itself is licensed under the GNU General Public License
