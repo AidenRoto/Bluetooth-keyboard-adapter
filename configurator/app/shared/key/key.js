@@ -161,7 +161,7 @@ angular.module("Key", ["ngMaterial"])
 			"OSRight": new KeyDaturm("R-⌘", 231, true),
 		};
 
-		var custom_settings = [
+		var ori_settings = [
 			key_data["None"],
 			key_data["None"],
 			key_data["None"],
@@ -274,6 +274,9 @@ angular.module("Key", ["ngMaterial"])
 			key_data["OSRight"],
 		];
 
+		var custom_settings = [];
+		angular.copy(ori_settings, custom_settings);
+
 		var consumer_data = [
 			key_data["VolumeUp"],
 			key_data["VolumeDown"],
@@ -284,11 +287,9 @@ angular.module("Key", ["ngMaterial"])
 		];
 
 		return {
-			transform_to_input_code: function(keycode) {
-				return key_data[keycode]; },
-			get_custom_settings: function() {
-				return custom_settings; },
-			get_consumer_data: function() {
-				return consumer_data; },
+			transform_to_input_code: function(keycode) { return key_data[keycode]; },
+			get_custom_settings: function() { return custom_settings; },
+			get_consumer_data: function() { return consumer_data; },
+			get_ori_settings: function() { return ori_settings; },
 		}
 	})
