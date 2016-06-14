@@ -118,6 +118,8 @@ angular.module("Layouts", [ "ngMaterial", "Key" ])
 			"NumpadDivide": new KeyDaturm("/", 84, false),
 			"NumpadMultiply": new KeyDaturm("*", 85, false),
 			"NumpadSubtract": new KeyDaturm("-", 86, false),
+			"NumpadAdd": new KeyDaturm("+", 87, false),
+			"NumpadEnter": new KeyDaturm("Enter", 88, false),
 			"Numpad1": new KeyDaturm("1", 89, false),
 			"Numpad2": new KeyDaturm("2", 90, false),
 			"Numpad3": new KeyDaturm("3", 91, false),
@@ -243,8 +245,8 @@ angular.module("Layouts", [ "ngMaterial", "Key" ])
 			key_data["ArrowRight"],
 			key_data["Numpad0"],
 			key_data["NumpadDecimal"],
-			key_data[""],
-			key_data[""],
+			key_data["NumpadAdd"],
+			key_data["NumpadEnter"],
 		];
 
 		return {

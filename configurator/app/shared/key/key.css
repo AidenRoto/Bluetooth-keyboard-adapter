@@ -56,6 +56,15 @@
 	width: 116px;
 }
 
+.vertical.size_2 .key.outer {
+	height: 112px;
+	width: 44px;
+}
+
+.vertical.size_2 .key.outer .inner {
+	height: 99px;
+}
+
 .size_2p75 .key.outer {
 	width: 134px;
 }
