@@ -3,6 +3,8 @@ This project is based from arduino nano broad, and is evolved from the old proje
 
 I really like to use my [KBP mini V60](https://www.facebook.com/media/set/?set=a.870489189643222.1073741835.316701428355337&type=3) mechanical keyboard, And I've wondered is there a Bluetooth adapter that can enhance this keyboard into a Bluetooth wireless keyboard. There are some products like [ATEN CS533](http://www.aten.com.tw/products/手持式裝置週邊與USB/TapUSB轉Bluetooth鍵盤滑鼠切換器/~CS533.html#.Vujzw8eLTcY), but there are issues saying that they are not compatible with some mechanical keyboards, so I decided to build my own Bluetooth keyboard adapter.
 
+![](readme_img/cover.jpg)
+
 ## Hardwares
 * [Arduino boards](https://www.arduino.cc/)  
 The board I used is [Arduino nano](https://www.arduino.cc/en/Main/ArduinoBoardNano)
