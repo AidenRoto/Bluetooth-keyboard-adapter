@@ -70,6 +70,20 @@ btKeyboard.ino is the interface that I made for users to customize the behavior 
 In this version, I do not provide any settings for users, but will add customize key definition and customize macro setting tools in the next version.  
 The only macro I implemented in btKeyboard.ino is hold **r**, **s**, **t** (note that order does matter, and you have to hold them until you press the last t), then release these thess keys, your bluefruit will do the re-pair process.
 
+## Consumer Report
+In this version, the keyboard adapter can not get the original consumer report from keyboard, but can define other keys to send consumer report. In the default settings in btKeyboard.ino file:
+
+| Original Key | Maped to Consumer Report |
+|--------------|--------------------------|
+| F1           | Volume Up                |
+| F2           | Volume Down              |
+| F3           | Home                     |
+| F4           | Search                   |
+| F5           | Play/Pause               |
+| F6           | Stop                     |
+
+and In the feature, there will be a more convenient configure interface. Any one wants to implement another key map, or to support some consumer report that bluefruit do not have should modify the 
+
 ## Power Control
 In this version, I added an arduino power control library, and turn off the following modules:
 
