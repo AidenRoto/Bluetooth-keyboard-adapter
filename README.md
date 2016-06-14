@@ -100,4 +100,4 @@ In this version, I added an arduino power control library, and turn off the foll
 If you want to save more power, you can consider to [build your barebone arduino](https://www.youtube.com/watch?v=sNIMCdVOHOM).
 
 ## License
-The content of this project itself is licensed under the GNU General Public License
+The content of the configurator is licensed under MIT license, and the rest content of this project is licensed under GPLv2.
