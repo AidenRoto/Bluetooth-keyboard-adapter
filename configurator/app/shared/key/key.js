@@ -13,7 +13,7 @@ angular.module("Key", [ "ngMaterial" ])
 
 				$scope.click_key = function() {
 					if(!$scope.selected)
-						$scope.$emit("selectEvnt");
+						$scope.$emit("selectEvnt", $scope.keyObj);
 					$scope.selected = !$scope.selected;
 				}
 
@@ -26,7 +26,14 @@ angular.module("Key", [ "ngMaterial" ])
 
 				$scope.$on("unselect", function(e) {
 					$scope.selected = false;
-				})
+				});
+
+				$scope.$on("setConsumerKey", function(e, keyObj) {
+					if($scope.selected) {
+						$scope.keyObj = keyObj;
+						$scope.$apply();
+					}
+				});
 			}
 		}
 	})
@@ -261,8 +268,18 @@ angular.module("Key", [ "ngMaterial" ])
 			key_data["NumpadEnter"],
 		];
 
+		var consumer_data = [
+			key_data["VolumeUp"],
+			key_data["VolumeDown"],
+			key_data["ConsumerHome"],
+			key_data["Search"],
+			key_data["Play/Pause"],
+			key_data["Stop"]
+		];
+
 		return {
 			transform_to_input_code: function(keycode) { return key_data[keycode]; },
-			get_custom_settings: function() { return custom_settings; }
+			get_custom_settings: function() { return custom_settings; },
+			get_consumer_data: function() { return consumer_data; },
 		}
 	})

@@ -172,3 +172,12 @@
 		</div>
 	</div>
 </div>
+<div layout="row" class="md-padding" ng-show="current_key">
+	<h2>Selected Special Key</h2>
+	<md-input-container>
+		<label>Key</label>
+		<md-select ng-model="current_key">
+			<md-option ng-repeat="key in consumer_data" value="{{key}}" ng-click="set_consumer_key(key)">{{key.representation}}</md-option>
+		</md-select>
+	</md-input-container>
+</div>
