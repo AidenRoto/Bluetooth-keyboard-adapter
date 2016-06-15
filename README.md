@@ -1,5 +1,5 @@
 # Bluetooth-keyboard-adapter
-This project is based from arduino nano broad, and is evolved from the old project which is based from linkit smart 7688 duo, you can still find the old project in the 'linkit\_smart\_7688\_duo\_version' directory.
+This project is based on arduino nano broad, and is evolved from the old project which is based from linkit smart 7688 duo, you can still find the old project in the 'linkit\_smart\_7688\_duo\_version' directory.
 
 I really like to use my [KBP mini V60](https://www.facebook.com/media/set/?set=a.870489189643222.1073741835.316701428355337&type=3) mechanical keyboard, And I've wondered is there a Bluetooth adapter that can enhance this keyboard into a Bluetooth wireless keyboard. There are some products like [ATEN CS533](http://www.aten.com.tw/products/手持式裝置週邊與USB/TapUSB轉Bluetooth鍵盤滑鼠切換器/~CS533.html#.Vujzw8eLTcY), but there are issues saying that they are not compatible with some mechanical keyboards, so I decided to build my own Bluetooth keyboard adapter.
 
@@ -8,14 +8,17 @@ I really like to use my [KBP mini V60](https://www.facebook.com/media/set/?set=a
 ## Hardwares
 * [Arduino boards](https://www.arduino.cc/)  
 The board I used is [Arduino nano](https://www.arduino.cc/en/Main/ArduinoBoardNano)
-![](https://www.arduino.cc/en/uploads/Main/ArduinoNanoFront_3_lg.jpg)
+![](https://www.arduino.cc/en/uploads/Main/ArduinoNanoFront_3_lg.jpg)(picture from [Arduino.cc](https://www.arduino.cc/en/Main/ArduinoBoardNano))  
 The reason why I used it is because I will use an [arduino usb host shiled]() (list below), and I want to integrate them into my keyboard, so the smaller the better. You may ask why I don't use [arduino pro mini](https://www.arduino.cc/en/Main/ArduinoBoardProMini) with [arduino pro mini usb host shield](https://www.circuitsathome.com/products-page/arduino-shields/usb-host-shield-for-arduino-pro-mini), it is because the pro mini and mini shiled I bought is very weird ([here](https://github.com/felis/USB_Host_Shield_2.0/issues/239) is the thread I talked with the developer), so I gave up at last.
 
 * [Arduino usb host shiled](https://www.circuitsathome.com/products-page/arduino-shields)  
 ![](https://camo.githubusercontent.com/705fb76e24f666e97bab97272c7f7f8f28a641f7/687474703a2f2f73686f702e746b6a656c656374726f6e6963732e646b2f696d616765732f5553425f486f73745f536869656c64312e6a7067)
+(picture from [Circuits@Home](https://www.circuitsathome.com/products-page/arduino-shields/usb-host-shield-2-0-for-arduino))
+
 
 * [Bluefruit EZ-Key 12 input Bluetooth HID Keyboard Controller](https://www.adafruit.com/products/1535)  
 ![](https://cdn-shop.adafruit.com/970x728/1535-00.jpg)
+(picture from [Adafruit](https://www.adafruit.com/product/1535))  
 This is the most expensive part, there is also some HID Bluetooth modules you can choose, so you can modify the MCU code to communicate with the Bluetooth module you chose. Also, be aware to the ability of the module you choose, some may not support HID customer reports, or some only sends English ASCII character, not implementing key press or release with keycode.  
 	I found there is another good module, [RN-42HID bluetooth module](http://twcn.rs-online.com/web/p/bluetooth-modules/8417484/), and this one can be easily retrieved from RS site. It also supports [customer report](http://cdn.sparkfun.com/datasheets/Wireless/Bluetooth/RN-HID-User-Guide-v1.0r.pdf).
 	
@@ -29,7 +32,7 @@ The main idea is this:
 
 ## Installation
 ### Install USB Host Shield Library
-Just do the [installation process in your arduino IDE](https://www.arduino.cc/en/Guide/Libraries), and install [usb library](https://github.com/felis/USB_Host_Shield_2.0), then install [lightweight lowe power arduino library](http://www.rocketscream.com/blog/2011/07/04/lightweight-low-power-arduino-library/)  
+Just do the [installation process in your arduino IDE](https://www.arduino.cc/en/Guide/Libraries), and install [usb library](https://github.com/felis/USB_Host_Shield_2.0), then install [lightweight low power arduino library](http://www.rocketscream.com/blog/2011/07/04/lightweight-low-power-arduino-library/)  
 
 Then copy these two files into the usb host shiled library directory:
 
@@ -89,7 +92,7 @@ In this version, the keyboard adapter can not get the original consumer report f
 | F5           | Play/Pause               |
 | F6           | Stop                     |
 
-and In the feature, there will be a more convenient configure interface. Any one wants to implement another key map, or to support some consumer report that bluefruit do not have should modify the 
+and In the feature, there will be a more convenient configure interface. Any one wants to implement another key map, or to support some consumer report that bluefruit do not have should modify the btKeybaord.ino file.
 
 ## Power Control
 In this version, I added an arduino power control library, and turn off the following modules:
