@@ -13,11 +13,16 @@ const int btRst = 4;
 SoftwareSerial BT = SoftwareSerial(btRx, btTx);
 
 class BtKeyboardParser : public BtKeyboardReportParser {
-    uint8_t map_table[102] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 129, 130, 131, 132, 133, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0 };
+    uint8_t map_table[102] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 129, 0, 0, 132, 133, 130, 131, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, };
     uint8_t modifier_table[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    uint8_t mouse_starters_num = 2;
+    uint8_t mouse_starters[2][2] = { { 60, 10 }, { 61, 5 } };
+    uint8_t mouse_actions[6] = { 72, 101, 82, 81, 80, 79 };
     bool send_consumer_report = false;
+    bool send_mouse_key = false;
     void modify_read_buffer(uint8_t buf[]);
     void modify_to_consumer_report(uint8_t buf[], uint8_t report_code);
+    void modify_to_mouse(uint8_t buf[], uint8_t pixels);
     void modify_modifier(uint8_t buf[], uint8_t modifier);
   protected:
     void OnKeyDown(uint8_t mod, uint8_t key, uint8_t buf[]);
@@ -93,6 +98,54 @@ void BtKeyboardParser::modify_to_consumer_report(uint8_t buf[], uint8_t report_c
   send_consumer_report = true;
 }
 
+void BtKeyboardParser::modify_to_mouse(uint8_t buf[], uint8_t pixels) {
+  buf[0] = 0;
+  buf[1] = 3;
+  bool x_move = false;
+  bool y_move = false;
+  bool button_action = false;
+
+  for(uint8_t i = 0; i < 2; ++i) {
+    if(buf[2] == mouse_actions[i] || buf[3] == mouse_actions[i] || buf[4] == mouse_actions[i]) {
+      buf[2] = i + 1; // check is mouse right or left key
+      button_action = true;
+      break;
+    }
+  }
+  for(uint8_t i = 2; i < 6; ++i) {
+    if(buf[2] == mouse_actions[i] || buf[3] == mouse_actions[i] || buf[4] == mouse_actions[i]) {
+      switch(i) {
+        case 2:
+          buf[4] = (-1) * pixels;
+          y_move = true;
+          break;
+        case 3:
+          buf[4] = pixels;
+          y_move = true;
+          break;
+        case 4:
+          buf[3] = (-1) * pixels;
+          x_move = true;
+          break;
+        case 5:
+          buf[3] = pixels;
+          x_move = true;
+          break;
+      }
+    }
+  }
+
+  if(!button_action) buf[2] = 0;
+  if(!x_move) buf[3] = 0;
+  if(!y_move) buf[4] = 0;
+
+  buf[5] = 0;
+  buf[6] = 0;
+  buf[7] = 0;
+
+  send_mouse_key = true;
+}
+
 void BtKeyboardParser::modify_read_buffer(uint8_t buf[]) { 
   uint8_t counter = 7;
   uint8_t modifier = buf[0];
@@ -142,8 +195,22 @@ void BtKeyboardParser::modify_read_buffer(uint8_t buf[]) {
   }
 
   if(send_consumer_report && (buf[0] + buf[1] + buf[2] + buf[3] + buf[4] + buf[5] + buf[6] + buf[7] == 0)) {
-    modify_to_consumer_report(buf, 0);
+    buf[1] = 2;
     send_consumer_report = false;
+    return;
+  }
+
+  if(send_mouse_key && (buf[0] + buf[1] + buf[2] + buf[3] + buf[4] + buf[5] + buf[6] + buf[7] == 0)) {
+    buf[2] = 3;
+    send_mouse_key = false;
+    return;
+  }
+
+  for(uint8_t i = 0; i < mouse_starters_num; ++i) {
+    if(buf[2] == mouse_starters[i][0]) {
+      modify_to_mouse(buf, mouse_starters[i][1]);
+      return;
+    }
   }
 }
 
@@ -189,7 +256,6 @@ void setup() {
   if (Usb.Init() == -1) Serial.println("OSC did not start.");
   delay(200);
 
-  next_time = millis() + 5000;
   HidKeyboard.SetReportParser(0, (HIDReportParser*)&Prs);
   LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER2_OFF, TIMER1_OFF, TIMER0_ON, SPI_ON, USART0_ON, TWI_OFF);
 }

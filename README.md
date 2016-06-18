@@ -81,7 +81,7 @@ To use this configurator, open the file **index.html** in the directory "configu
 You can click any key, and the press the corresponding key you wish to remap to. Then press "OUTPUT CONFIG", replace these two arrays appears at bottom, and burn onto your arduino.
 
 ### Output and load configures
-When you press the "OUPTUT CONFIG", your browser will download a file "keyboard_confiture.dat". This file is just a JSON string, so do not burn this onto your arduino.  
+When you press the "OUPTUT CONFIG", your browser will download a file "keyboard_configure.dat". This file is just a JSON string, so do not burn this onto your arduino.  
 You can press the "LOAD CONFIG" button to load your configure file, which is obtained from clicking "OUTPUT CONFIG" button.
 
 ## Consumer Report
