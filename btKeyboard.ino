@@ -1,5 +1,5 @@
 #include <btHIDBoot.h>
-#include <LowPower.h>
+#include <LowPower.h>3
 #include <SoftwareSerial.h>
 #include <SPI.h>
 
@@ -12,12 +12,19 @@ const int btRx = 2;
 const int btRst = 4;
 SoftwareSerial BT = SoftwareSerial(btRx, btTx);
 
+void send_to_bluefruit(uint8_t buf[]) {
+  BT.write(0xFD);
+  for(uint8_t i = 0; i < 8; ++i)
+    BT.write(buf[i]);
+}
+
 class BtKeyboardParser : public BtKeyboardReportParser {
     uint8_t map_table[102] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 129, 0, 0, 132, 133, 130, 131, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, };
     uint8_t modifier_table[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     uint8_t mouse_starters_num = 2;
-    uint8_t mouse_starters[2][2] = { { 60, 10 }, { 61, 5 } };
-    uint8_t mouse_actions[6] = { 72, 101, 82, 81, 80, 79 };
+    uint8_t mouse_starters[2][2] = { { 60, 15 }, { 61, 5 } };
+    uint8_t mouse_actions[6] = { 44, 101, 82, 81, 80, 79 };
+    uint8_t previous_mouse_code[8];
     bool send_consumer_report = false;
     bool send_mouse_key = false;
     void modify_read_buffer(uint8_t buf[]);
@@ -27,6 +34,8 @@ class BtKeyboardParser : public BtKeyboardReportParser {
   protected:
     void OnKeyDown(uint8_t mod, uint8_t key, uint8_t buf[]);
     void OnKeyUp(uint8_t mod, uint8_t key, uint8_t buf[]);
+  public:
+    void continue_mouse_move();
 };
 
 void BtKeyboardParser::modify_modifier(uint8_t buf[], uint8_t modifier) {
@@ -144,6 +153,9 @@ void BtKeyboardParser::modify_to_mouse(uint8_t buf[], uint8_t pixels) {
   buf[7] = 0;
 
   send_mouse_key = true;
+  for(uint8_t i = 0; i < 8; ++i) {
+    previous_mouse_code[i] = buf[i];
+  }
 }
 
 void BtKeyboardParser::modify_read_buffer(uint8_t buf[]) { 
@@ -216,17 +228,9 @@ void BtKeyboardParser::modify_read_buffer(uint8_t buf[]) {
 
 void BtKeyboardParser::OnKeyDown(uint8_t mod, uint8_t key, uint8_t buf[]) {
   modify_read_buffer(buf);
-  BT.write(0xFD);
-  Serial.println("Key Down");
-  for(uint8_t i = 0; i < 8; ++i) {
-    Serial.print(buf[i]);
-    BT.write(buf[i]);
-    Serial.print(" ");  
-  }
-  Serial.println("");
+  send_to_bluefruit(buf);
   if(buf[0] == 0 && buf[1] == 0 && buf[2] == 21 && buf[3] == 22 && buf[4] == 23 && buf[5] == 0 && buf[6] == 0 && buf[7] == 0) {
     digitalWrite(btRst, HIGH);
-    Serial.println("reset");
     delay(7000);
     digitalWrite(btRst, LOW);
   }
@@ -234,14 +238,16 @@ void BtKeyboardParser::OnKeyDown(uint8_t mod, uint8_t key, uint8_t buf[]) {
 
 void BtKeyboardParser::OnKeyUp(uint8_t mod, uint8_t key, uint8_t buf[]) {
   modify_read_buffer(buf);
-  BT.write(0xFD);
-  Serial.println("Key Up");
-  for(uint8_t i = 0; i < 8; ++i) {
-    Serial.print(buf[i]);
-    BT.write(buf[i]);
-    Serial.print(" ");  
+  send_to_bluefruit(buf);
+}
+
+void BtKeyboardParser::continue_mouse_move() {
+  if(send_mouse_key) {
+    uint8_t release_key_buf[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    send_to_bluefruit(release_key_buf);
+    delay(20);
+    send_to_bluefruit(previous_mouse_code);
   }
-  Serial.println("");
 }
 
 BtKeyboardParser Prs;
@@ -249,7 +255,7 @@ BtKeyboardParser Prs;
 void setup() {
   pinMode(btRst, OUTPUT);
   digitalWrite(btRst, LOW);
-  Serial.begin(115200);
+  Serial.begin(115200); 
   BT.begin(9600);
   Serial.println("Start");
 
@@ -262,4 +268,5 @@ void setup() {
 
 void loop() {
   Usb.Task();
+  Prs.continue_mouse_move();
 }
