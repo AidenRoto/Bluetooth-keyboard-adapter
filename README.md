@@ -80,6 +80,10 @@ The only macro I implemented in btKeyboard.ino is hold **r**, **s**, **t** (note
 To use this configurator, open the file **index.html** in the directory "configurator".  
 You can click any key, and the press the corresponding key you wish to remap to. Then press "OUTPUT CONFIG", replace these two arrays appears at bottom, and burn onto your arduino.
 
+### Output and load configures
+When you press the "OUPTUT CONFIG", your browser will download a file "keyboard_confiture.dat". This file is just a JSON string, so do not burn this onto your arduino.  
+You can press the "LOAD CONFIG" button to load your configure file, which is obtained from clicking "OUTPUT CONFIG" button.
+
 ## Consumer Report
 In this version, the keyboard adapter can not get the original consumer report from keyboard, but can define other keys to send consumer report. In the default settings in btKeyboard.ino file:
 
