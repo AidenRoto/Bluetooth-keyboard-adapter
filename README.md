@@ -1,7 +1,8 @@
 # Bluetooth-keyboard-adapter
 This project is based on arduino nano broad, and is evolved from the old project which is based from linkit smart 7688 duo, you can still find the old project in the 'linkit\_smart\_7688\_duo\_version' directory.
 
-I really like to use my [KBP mini V60](https://www.facebook.com/media/set/?set=a.870489189643222.1073741835.316701428355337&type=3) mechanical keyboard, And I've wondered is there a Bluetooth adapter that can enhance this keyboard into a Bluetooth wireless keyboard. There are some products like [ATEN CS533](http://www.aten.com.tw/products/手持式裝置週邊與USB/TapUSB轉Bluetooth鍵盤滑鼠切換器/~CS533.html#.Vujzw8eLTcY), but there are issues saying that they are not compatible with some mechanical keyboards, so I decided to build my own Bluetooth keyboard adapter.
+I really like to use my [KBP mini V60](https://www.facebook.com/media/set/?set=a.870489189643222.1073741835.316701428355337&type=3) mechanical keyboard, And I've wondered is there a Bluetooth adapter that can enhance this keyboard into a Bluetooth wireless keyboard. There are some products like [ATEN CS533](http://www.aten.com.tw/products/手持式裝置週邊與USB/TapUSB轉Bluetooth鍵盤滑鼠切換器/~CS533.html#.Vujzw8eLTcY), but there are issues saying that they are not compatible with some mechanical keyboards, so I decided to build my own Bluetooth keyboard adapter.  
+The bluetooth module I use can also support mouse simulation, so I also implement this feature in the project.
 
 ![](readme_img/cover.jpg)
 
@@ -73,7 +74,7 @@ btKeyboard.ino is the interface that I made for users to customize the behavior 
 
 ## Key Settings
 In this version, I provided an configurator for remapping keys, but no macro configuration tools. 
-The only macro I implemented in btKeyboard.ino is hold **r**, **s**, **t** (note that order does matter, and you have to hold them until you press the last t), then release these thess keys, your bluefruit will do the re-pair process.
+The only combination I implemented in btKeyboard.ino is hold **r**, **s**, **t** (note that order does matter, and you have to hold them until you press the last t), then release these thess keys, your bluefruit will do the re-pair process.
 
 ## Configurator
 ![](readme_img/configurator.png)
@@ -91,12 +92,18 @@ In this version, the keyboard adapter can not get the original consumer report f
 |--------------|--------------------------|
 | F1           | Volume Up                |
 | F2           | Volume Down              |
-| F3           | Home                     |
-| F4           | Search                   |
 | F5           | Play/Pause               |
 | F6           | Stop                     |
+| F7           | Home                     |
+| F8           | Search                   |
 
 and In the feature, there will be a more convenient configure interface. Any one wants to implement another key map, or to support some consumer report that bluefruit do not have should modify the btKeybaord.ino file.
+
+## Simulate Mouse
+Because bluefruit EZ-Key can simulate mouse input, so I implement this function into this project, and I can relief from move my hands to hold mouse for some simple click.  
+To simulate mouse input, in the default settings, hold the key **F3**, then up, down, left, right will become mouse move with 15px, and you can hold to continue moving.  
+**F4** will also do the mouse move, but with each time moving with 1px.  
+You can simulate mouse click by holding **F3** or **F4**, and press  **Space** to simulate left click, and **menu** will become right click.
 
 ## Power Control
 In this version, I added an arduino power control library, and turn off the following modules:
