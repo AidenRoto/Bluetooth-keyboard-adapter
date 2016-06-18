@@ -10,6 +10,29 @@ angular.module("ConfiguratorApp", [ "ngMaterial", "Key", "Layouts" ])
 				event.preventDefault();
 				$scope.$broadcast("keyPress", e.code);
 			}
+
+			$scope.loader = document.getElementById("loader");
+			$scope.loader.addEventListener("change", $scope.load);
+		}
+
+		$scope.load = function() {
+			var file = $scope.loader.files[0];
+			if(!file) return;
+
+			var reader = new FileReader();
+			reader.onload = function(event) {
+				var content = event.target.result;
+				var configures = angular.fromJson(content);
+				var custom_settings = keyboardDataService.get_custom_settings();
+
+				for(var i = 0; i < custom_settings.length; ++i)
+					custom_settings[i] = configures[i];
+
+				console.log(custom_settings);
+				$scope.$apply();
+			}
+
+			reader.readAsText(file);
 		}
 
 		$scope.output = function() {
@@ -33,5 +56,17 @@ angular.module("ConfiguratorApp", [ "ngMaterial", "Key", "Layouts" ])
 					$scope.modifier_table += " " + custom_settings[i].hid_code + ",";
 			}
 			$scope.modifier_table += " };";
+
+			var content = "data:text/csv;charset=utf-8,";
+			var link = document.createElement("a");
+			link.setAttribute("download",  "keyboard_configure.dat");
+			content += angular.toJson(custom_settings);
+			var encodedUri = encodeURI(content);
+			link.setAttribute("href", encodedUri);
+			link.click();
+		}
+
+		$scope.press_load = function() {
+			$scope.loader.click();
 		}
 	})
