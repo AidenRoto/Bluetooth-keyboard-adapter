@@ -18,19 +18,32 @@ void send_to_bluefruit(uint8_t buf[]) {
     BT.write(buf[i]);
 }
 
+void debug(uint8_t buf[]) {
+  for(uint8_t i = 0; i < 8; ++i) {
+    Serial.print(buf[i]);
+    Serial.print(" ");
+  }
+  Serial.println("");
+}
+
 class BtKeyboardParser : public BtKeyboardReportParser {
     uint8_t map_table[102] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 129, 0, 0, 132, 133, 130, 131, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, };
     uint8_t modifier_table[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    uint8_t mouse_starters_num = 2;
-    uint8_t mouse_starters[2][2] = { { 60, 15 }, { 61, 5 } };
+    uint8_t defult_mouse_move_pixels = 15;
+    uint8_t mouse_switch = 60;
     uint8_t mouse_actions[6] = { 44, 101, 82, 81, 80, 79 };
+    uint8_t mouse_move_pair_num = 1;
+    uint8_t mouse_move_pixels_paris[1][2] = { { 9, 4 } };
+    uint8_t bt_buf[8];
     uint8_t previous_mouse_code[8];
+    bool mouse_mode = false;
     bool send_consumer_report = false;
     bool send_mouse_key = false;
-    void modify_read_buffer(uint8_t buf[]);
+    void modify_bt_buffer(uint8_t buf[]);
     void modify_to_consumer_report(uint8_t buf[], uint8_t report_code);
-    void modify_to_mouse(uint8_t buf[], uint8_t pixels);
+    void modify_to_mouse(uint8_t buf[]);
     void modify_modifier(uint8_t buf[], uint8_t modifier);
+    void copy_buffer(uint8_t buf[]);
   protected:
     void OnKeyDown(uint8_t mod, uint8_t key, uint8_t buf[]);
     void OnKeyUp(uint8_t mod, uint8_t key, uint8_t buf[]);
@@ -99,47 +112,62 @@ void BtKeyboardParser::modify_to_consumer_report(uint8_t buf[], uint8_t report_c
       buf[2] = 0;
       buf[3] = 0;
   }
-  buf[4] = 0;
-  buf[5] = 0;
-  buf[6] = 0;
-  buf[7] = 0;
+  buf[4] = buf[5] = buf[7] = 0;
 
   send_consumer_report = true;
 }
 
-void BtKeyboardParser::modify_to_mouse(uint8_t buf[], uint8_t pixels) {
+void BtKeyboardParser::modify_to_mouse(uint8_t buf[]) {
   buf[0] = 0;
   buf[1] = 3;
   bool x_move = false;
   bool y_move = false;
   bool button_action = false;
+  uint8_t move_pixels = defult_mouse_move_pixels;
 
-  for(uint8_t i = 0; i < 2; ++i) {
-    if(buf[2] == mouse_actions[i] || buf[3] == mouse_actions[i] || buf[4] == mouse_actions[i]) {
-      buf[2] = i + 1; // check is mouse right or left key
-      button_action = true;
-      break;
+  debug(buf);
+
+  for(uint8_t i = 0; i < mouse_move_pair_num; ++i) {
+    for(uint8_t j = 2; j < 8; ++j) {
+      if(buf[j] == mouse_move_pixels_paris[i][0]) {
+        move_pixels = mouse_move_pixels_paris[i][1];
+      }
     }
   }
+
+  for(uint8_t i = 0; i < 2; ++i) {
+    // check left or right click
+    for(uint8_t j = 2; j < 8; ++j) {
+      if(buf[j] == mouse_actions[i]) {
+        buf[2] = i + 1;
+        button_action = true;
+        break;
+      }
+    }
+    if(button_action)
+      break;
+  }
   for(uint8_t i = 2; i < 6; ++i) {
-    if(buf[2] == mouse_actions[i] || buf[3] == mouse_actions[i] || buf[4] == mouse_actions[i]) {
-      switch(i) {
-        case 2:
-          buf[4] = (-1) * pixels;
-          y_move = true;
-          break;
-        case 3:
-          buf[4] = pixels;
-          y_move = true;
-          break;
-        case 4:
-          buf[3] = (-1) * pixels;
-          x_move = true;
-          break;
-        case 5:
-          buf[3] = pixels;
-          x_move = true;
-          break;
+    for(uint8_t j = 2; j < 8; ++j) {
+      if(buf[j] == mouse_actions[i]) {
+        switch(i) {
+          case 2:
+            buf[4] = (-1) * move_pixels;
+            y_move = true;
+            break;
+          case 3:
+            buf[4] = move_pixels;
+            y_move = true;
+            break;
+          case 4:
+            buf[3] = (-1) * move_pixels;
+            x_move = true;
+            break;
+          case 5:
+            buf[3] = move_pixels;
+            x_move = true;
+            break;
+        }
       }
     }
   }
@@ -148,9 +176,9 @@ void BtKeyboardParser::modify_to_mouse(uint8_t buf[], uint8_t pixels) {
   if(!x_move) buf[3] = 0;
   if(!y_move) buf[4] = 0;
 
-  buf[5] = 0;
-  buf[6] = 0;
-  buf[7] = 0;
+  buf[5] = buf[6] = buf[7] = 0;
+
+  debug(buf);
 
   send_mouse_key = true;
   for(uint8_t i = 0; i < 8; ++i) {
@@ -158,7 +186,7 @@ void BtKeyboardParser::modify_to_mouse(uint8_t buf[], uint8_t pixels) {
   }
 }
 
-void BtKeyboardParser::modify_read_buffer(uint8_t buf[]) { 
+void BtKeyboardParser::modify_bt_buffer(uint8_t buf[]) {
   uint8_t counter = 7;
   uint8_t modifier = buf[0];
   for(int i = 128; i > 0; i /= 2) {
@@ -206,30 +234,30 @@ void BtKeyboardParser::modify_read_buffer(uint8_t buf[]) {
     }
   }
 
-  if(send_consumer_report && (buf[0] + buf[1] + buf[2] + buf[3] + buf[4] + buf[5] + buf[6] + buf[7] == 0)) {
+  if(buf[2] == mouse_switch)
+    mouse_mode = !mouse_mode;
+
+  if(send_consumer_report && (buf[0] + buf[2] + buf[3] + buf[4] + buf[5] + buf[6] + buf[7] == 0)) {
     buf[1] = 2;
     send_consumer_report = false;
     return;
   }
 
-  if(send_mouse_key && (buf[0] + buf[1] + buf[2] + buf[3] + buf[4] + buf[5] + buf[6] + buf[7] == 0)) {
-    buf[2] = 3;
+  if(send_mouse_key && (buf[0] + buf[2] + buf[3] + buf[4] + buf[5] + buf[6] + buf[7] == 0)) {
+    buf[1] = 3;
     send_mouse_key = false;
     return;
   }
 
-  for(uint8_t i = 0; i < mouse_starters_num; ++i) {
-    if(buf[2] == mouse_starters[i][0]) {
-      modify_to_mouse(buf, mouse_starters[i][1]);
-      return;
-    }
-  }
+  if(mouse_mode)
+    modify_to_mouse(buf);
 }
 
 void BtKeyboardParser::OnKeyDown(uint8_t mod, uint8_t key, uint8_t buf[]) {
-  modify_read_buffer(buf);
-  send_to_bluefruit(buf);
-  if(buf[0] == 0 && buf[1] == 0 && buf[2] == 21 && buf[3] == 22 && buf[4] == 23 && buf[5] == 0 && buf[6] == 0 && buf[7] == 0) {
+  copy_buffer(buf);
+  modify_bt_buffer(bt_buf);
+  send_to_bluefruit(bt_buf);
+  if(bt_buf[0] == 0 && bt_buf[1] == 0 && bt_buf[2] == 21 && bt_buf[3] == 22 && bt_buf[4] == 23 && bt_buf[5] == 0 && bt_buf[6] == 0 && bt_buf[7] == 0) {
     digitalWrite(btRst, HIGH);
     delay(7000);
     digitalWrite(btRst, LOW);
@@ -237,17 +265,23 @@ void BtKeyboardParser::OnKeyDown(uint8_t mod, uint8_t key, uint8_t buf[]) {
 }
 
 void BtKeyboardParser::OnKeyUp(uint8_t mod, uint8_t key, uint8_t buf[]) {
-  modify_read_buffer(buf);
-  send_to_bluefruit(buf);
+  copy_buffer(buf);
+  modify_bt_buffer(bt_buf);
+  send_to_bluefruit(bt_buf);
 }
 
 void BtKeyboardParser::continue_mouse_move() {
   if(send_mouse_key) {
     uint8_t release_key_buf[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     send_to_bluefruit(release_key_buf);
-    delay(20);
+    delay(10);
     send_to_bluefruit(previous_mouse_code);
   }
+}
+
+void BtKeyboardParser::copy_buffer(uint8_t buf[]) {
+  for(uint8_t i = 0; i < 8; ++i) 
+    bt_buf[i] = buf[i];
 }
 
 BtKeyboardParser Prs;
