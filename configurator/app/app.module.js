@@ -53,7 +53,7 @@ angular.module("ConfiguratorApp", [ "ngMaterial", "Key", "Layouts" ])
 			}
 			$scope.map_table += " };";
 
-			$scope.modifier_table = "uint8_t modifier_table[8] = {";
+			$scope.modifier_table = "uint8_t modifier_table[8] = { ";
 			for(var i = 102; i < 110; ++i) {
 				if(ori_settings[i].hid_code == custom_settings[i].hid_code)
 					$scope.modifier_table += " 0,";
@@ -61,6 +61,23 @@ angular.module("ConfiguratorApp", [ "ngMaterial", "Key", "Layouts" ])
 					$scope.modifier_table += " " + custom_settings[i].hid_code + ",";
 			}
 			$scope.modifier_table += " };";
+
+			$scope.default_mouse_move_pixels = "uint8_t defult_mouse_move_pixels = " + mouse_settings.default_move_pixels + ";";
+			$scope.mouse_switch = "uint8_t mouse_switch = " + mouse_settings.switch_key.hid_code + ";";
+
+			$scope.mouse_actions = "uint8_t mouse_actions[6] = { ";
+			for(var i = 0; i < mouse_settings.actions.length; ++i) {
+				$scope.mouse_actions += mouse_settings.actions[i].hid_code + ", ";
+			}
+			$scope.mouse_actions += " };";
+
+			$scope.move_pair_num = "uint8_t mouse_move_pair_num = " + mouse_settings.precisions.length + ";";
+
+			$scope.move_pair = "uint8_t mouse_move_pixels_paris[" + mouse_settings.precisions.length + "][2] = { ";
+			for(var i = 0; i < mouse_settings.precisions.length; ++i) {
+				$scope.move_pair += "{ " + mouse_settings.precisions[i].key.hid_code + ", " + mouse_settings.precisions[i].pixels + "}, ";
+			}
+			$scope.move_pair += " };"
 
 			var content = "data:text/csv;charset=utf-8,";
 			var link = document.createElement("a");

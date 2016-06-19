@@ -297,7 +297,7 @@ angular.module("Key", ["ngMaterial"])
 				key_data["ArrowRight"]
 			],
 			precisions: [
-				{ key: key_data["KeyF"], pixels: 15 },
+				{ key: key_data["KeyF"], pixels: 4 },
 			],
 			default_move_pixels: 15,
 		};
