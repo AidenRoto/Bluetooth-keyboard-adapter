@@ -100,10 +100,13 @@ In this version, the keyboard adapter can not get the original consumer report f
 and In the feature, there will be a more convenient configure interface. Any one wants to implement another key map, or to support some consumer report that bluefruit do not have should modify the btKeybaord.ino file.
 
 ## Simulate Mouse
-Because bluefruit EZ-Key can simulate mouse input, so I implement this function into this project, and I can relief from move my hands to hold mouse for some simple click.  
-To simulate mouse input, in the default settings, hold the key **F3**, then up, down, left, right will become mouse move with 15px, and you can hold to continue moving.  
-**F4** will also do the mouse move, but with each time moving with 1px.  
-You can simulate mouse click by holding **F3** or **F4**, and press  **Space** to simulate left click, and **menu** will become right click.
+Because bluefruit EZ-Key can simulate mouse input, so I implement this function into this project, and I can relief from move my hands to hold mouse for some simple click.
+
+To simulate mouse input, in the default settings, press the key **F3**, you you will enter mouse mode. In this mode, up, down, left, right arrow keys will become mouse move with 15px, and you can hold the arrow key to continue moving. If you want a more precise mouse moving, e.g. a slower mouse move, hold the **F** key, then any arrow key will move to the coresponding directions with 2px.
+
+In the mosue mode, your **Space** key will become mouse left click, and **menu** key will become mouse right click.
+
+You can press the key **F3** again to leave mouse mode.
 
 ## Power Control
 In this version, I added an arduino power control library, and turn off the following modules:
