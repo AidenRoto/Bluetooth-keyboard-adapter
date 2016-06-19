@@ -298,7 +298,8 @@ angular.module("Key", ["ngMaterial"])
 			],
 			precisions: [
 				{ key: key_data["KeyF"], pixels: 15 },
-			]
+			],
+			default_move_pixels: 15,
 		};
 
 		return {

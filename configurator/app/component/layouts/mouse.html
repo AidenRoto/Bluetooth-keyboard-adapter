@@ -5,12 +5,19 @@
 				<p>Mouse Mode Switch Key</p>
 				<key key-obj="mouse_settings.switch_key"></key>
 			</div>
+			<div layout="column" layout-align="center center">
+				<p>Default Mouse Move Pixels</p>
+				<md-input-container>
+					<label>Pixels</label>
+					<input ng-model="mouse_settings.default_move_pixels" type="number" min="0" max="128" integer />
+				</md-input-container>
+			</div>
 			<md-list>
 				<md-subheader>Mouse Move Precision Setting Pairs</md-subheader>
 					<md-list-item class="md-3-line" ng-repeat="precision_pair in mouse_settings.precisions">
 						<key key-obj="precision_pair.key"></key>
 						<md-input-container>
-							<label>Pixel</label>
+							<label>Pixels</label>
 							<input ng-model="precision_pair.pixels" type="number" min="0" max="128" integer />
 						</md-input-container>
 						<md-button class="md-raised md-warn" ng-click="remove_pair(precision_pair)">Delete</md-button>
