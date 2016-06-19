@@ -19,3 +19,12 @@ angular.module("Layouts", [ "ngMaterial", "Key" ])
 			}
 		}
 	})
+	.directive("mouseLayout", function() {
+		return {
+			restrict: "E",
+			templateUrl: "app/component/layouts/mouse.html",
+			controller: function($scope, keyboardDataService) {
+
+			}
+		}
+	})

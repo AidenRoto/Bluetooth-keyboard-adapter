@@ -11,8 +11,19 @@
 	<md-toolbar layout="row" layout-align="center" flex="nogrow">
 		<h3>Keyboard Configurator</h3>
 	</md-toolbar>
-	<div flex layout="column" layout-align="center center">
-		<full-layout></full-layout>
+	<md-content flex layout="column">
+		<md-tabs md-border-bottom class="md-whiteframe-1dp" flex="noshrink">
+			<md-tab label="keyboard" md-on-select="unselect_all()">
+				<md-content layout="column" layout-align="center" layout-padding>
+					<full-layout></full-layout>
+				</md-content>
+			</md-tab>
+			<md-tab label="mouse" md-on-select="unselect_all()">
+				<md-content layout="column" layout-align="center" layout-padding>
+					<mouse-layout></mouse-layout>
+				</md-content>
+			</md-tab>
+		</md-tabs>
 		<div flex="nogrow" layout="column" layout-align="center center" class="layout-padding">
 			<div layout="row">
 				<md-button class="md-raised" ng-click="press_load()">Load Config</md-button>
@@ -26,7 +37,7 @@
 				{{modifier_table}}
 			</div>
 		</div>
-	</div>
+	</md-content>
 	
 	<!-- Script -->
 	<script type="text/javascript" src="./lib/node_modules/angular/angular.js"></script>

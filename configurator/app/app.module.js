@@ -69,4 +69,9 @@ angular.module("ConfiguratorApp", [ "ngMaterial", "Key", "Layouts" ])
 		$scope.press_load = function() {
 			$scope.loader.click();
 		}
+
+		$scope.unselect_all = function() {
+			$scope.$broadcast("unselect");
+			console.log("hre");
+		}
 	})
