@@ -72,3 +72,9 @@
 .size_space .key.outer {
 	width: 331px;
 }
+
+.mouse_key .key.outer {
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+	width: 45px;
+}

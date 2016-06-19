@@ -286,10 +286,26 @@ angular.module("Key", ["ngMaterial"])
 			key_data["Stop"]
 		];
 
+		var mouse_settings = {
+			switch_key: key_data["F3"],
+			actions: [
+				key_data["Space"],
+				key_data["ContextMenu"],
+				key_data["ArrowUp"],
+				key_data["ArrowDown"],
+				key_data["ArrowLeft"],
+				key_data["ArrowRight"]
+			],
+			precisions: [
+				[ key_data["KeyF"], 15 ]
+			]
+		};
+
 		return {
 			transform_to_input_code: function(keycode) { return key_data[keycode]; },
 			get_custom_settings: function() { return custom_settings; },
 			get_consumer_data: function() { return consumer_data; },
 			get_ori_settings: function() { return ori_settings; },
+			get_mouse_settings: function() { return mouse_settings; },
 		}
 	})

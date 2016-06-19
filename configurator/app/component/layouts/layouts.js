@@ -24,7 +24,11 @@ angular.module("Layouts", [ "ngMaterial", "Key" ])
 			restrict: "E",
 			templateUrl: "app/component/layouts/mouse.html",
 			controller: function($scope, keyboardDataService) {
+				$scope.mouse_settings = keyboardDataService.get_mouse_settings();
 
+				$scope.$on("selectEvnt", function(e, keyObj) {
+					$scope.$broadcast("unselect");
+				})
 			}
 		}
 	})

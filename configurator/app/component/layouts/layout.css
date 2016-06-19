@@ -28,3 +28,55 @@
 	margin-right: 0px;
 	display: inline-block;
 }
+
+.key.outer.mouse_button {
+	border-width: 1px;
+	border-top-left-radius: initial;
+	border-top-right-radius: initial;
+	border-bottom-right-radius: 35px;
+	border-bottom-left-radius: 35px;
+	border-style: solid;
+	border-color: rgb(170, 170, 170);
+	width:100px;
+	height: 120px;
+}
+
+#mouse_shell {
+	margin: 12px;
+}
+
+.upper_triangle {
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 0 25px 30px 25px;
+	border-color: transparent transparent #007bff transparent;
+	margin: 12px;
+}
+
+.lower_triangle {
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 43.3px 25px 0 25px;
+	border-color: #007bff transparent transparent transparent;
+	margin: 12px;
+}
+
+.left_triangle {
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 25px 30px 25px 0;
+	border-color: transparent #007bff transparent transparent;
+	margin: 12px;
+}
+
+.right_triangle {
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 25px 0 25px 30px;
+	border-color: transparent transparent transparent #007bff;
+	margin: 12px;
+}

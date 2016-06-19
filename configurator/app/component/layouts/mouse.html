@@ -1,1 +1,32 @@
-mouse page
+<div layout="row" layout-align="center center">
+	<div class="layout-padding">
+		mouse precisions
+	</div>
+	<div flex="nogrow" layout="column" class="layout-padding">
+		<div flex layout="column" layout-align="center center">
+			<div class="upper_triangle"></div>
+			<key key-obj="mouse_settings.actinos[2]"></key>
+		</div>
+		<div flex layout="row" layout-align="center center">
+			<div flex="nogrow" layout="row">
+				<div class="left_triangle"></div>
+				<key key-obj="mouse_settings.actinos[4]"></key>
+			</div>
+			<div id="mouse_shell">
+				<div layout="row">
+					<key class="mouse_key" key-obj="mouse_settings.actinos[0]"></key>
+					<key class="mouse_key" key-obj="mouse_settings.actinos[1]"></key>
+				</div>
+				<div class="key outer mouse_button"></div>
+			</div>
+			<div flex="nogrow" layout="row">
+				<key key-obj="mouse_settings.actinos[5]"></key>
+				<div class="right_triangle"></div>
+			</div>
+		</div>
+		<div flex layout="column" layout-align="center center">
+			<key key-obj="mouse_settings.actinos[3]"></key>
+			<div class="lower_triangle"></div>
+		</div>
+	</div>
+</div>
