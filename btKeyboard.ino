@@ -27,6 +27,7 @@ void debug(uint8_t buf[]) {
 }
 
 class BtKeyboardParser : public BtKeyboardReportParser {
+    // =============== custom settings start =============== //
     uint8_t map_table[102] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 129, 0, 0, 132, 133, 130, 131, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, };
     uint8_t modifier_table[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     uint8_t defult_mouse_move_pixels = 15;
@@ -34,6 +35,7 @@ class BtKeyboardParser : public BtKeyboardReportParser {
     uint8_t mouse_actions[6] = { 44, 101, 82, 81, 80, 79 };
     uint8_t mouse_move_pair_num = 1;
     uint8_t mouse_move_pixels_paris[1][2] = { { 9, 4 } };
+    // =============== custom settings end ================ //
     uint8_t bt_buf[8];
     uint8_t previous_mouse_code[8];
     bool mouse_mode = false;
