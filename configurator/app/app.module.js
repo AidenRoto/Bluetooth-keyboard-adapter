@@ -7,7 +7,10 @@ angular.module("ConfiguratorApp", [ "ngMaterial", "Key", "Layouts" ])
 	.controller("appCtrl", function($scope, keyboardDataService) {
 		$scope.init_app = function() {
 			document.onkeydown = function(e) {
-				event.preventDefault();
+                if(document.activeElement.tagName != "INPUT") {
+                    console.log("here");
+                    event.preventDefault();
+                }
 				$scope.$broadcast("keyPress", e.code);
 			}
 
