@@ -77,9 +77,18 @@ In this version, I provided an configurator for remapping keys, but no macro con
 The only combination I implemented in btKeyboard.ino is hold **r**, **s**, **t** (note that order does matter, and you have to hold them until you press the last t), then release these thess keys, your bluefruit will do the re-pair process.
 
 ## Configurator
-![](readme_img/configurator.png)
-To use this configurator, open the file **index.html** in the directory "configurator".  
-You can click any key, and the press the corresponding key you wish to remap to. Then press "OUTPUT CONFIG", replace these two arrays appears at bottom, and burn onto your arduino.
+![](readme_img/configurator_keyboard.png)
+To use this configurator, turn on an web server(like python simpleHTTPServer, node http-server, etc) to open **index.html** in the directory "configurator".  
+You can click any key, and the press the corresponding key you wish to remap to.
+
+![](readme_img/configurator_mouse.png)
+There is also an mouse configurator for you. but note, the key in mouse configurator can only support normal keys(e.g. no modifier keys, consumer keys, etc).  
+
+![](readme_img/configurator_output.png)
+Then press "OUTPUT CONFIG", replace these texts appears at bottom, and burn onto your arduino.
+
+![](readme_img/replace.png)
+Replace the output code to the segment "custome settings"
 
 ### Output and load configures
 When you press the "OUPTUT CONFIG", your browser will download a file "keyboard_configure.dat". This file is just a JSON string, so do not burn this onto your arduino.  
