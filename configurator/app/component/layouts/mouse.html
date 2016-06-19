@@ -11,7 +11,7 @@
 						<key key-obj="precision_pair.key"></key>
 						<md-input-container>
 							<label>Pixel</label>
-							<input ng-model="precision_pair.pixels">
+							<input ng-model="precision_pair.pixels" type="number" min="0" max="128" integer />
 						</md-input-container>
 						<md-button class="md-raised md-warn" ng-click="remove_pair(precision_pair)">Delete</md-button>
 					</md-list-item>

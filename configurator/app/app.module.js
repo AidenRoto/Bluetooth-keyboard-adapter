@@ -24,11 +24,15 @@ angular.module("ConfiguratorApp", [ "ngMaterial", "Key", "Layouts" ])
 				var content = event.target.result;
 				var configures = angular.fromJson(content);
 				var custom_settings = keyboardDataService.get_custom_settings();
+				var mouse_settings = keyboardDataService.get_mouse_settings();
 
 				for(var i = 0; i < custom_settings.length; ++i)
-					custom_settings[i] = configures[i];
+					custom_settings[i] = configures.keyboard[i];
 
-				console.log(custom_settings);
+				angular.forEach(configures.mouse, function(value, key) {
+					mouse_settings[key] = value;
+				})
+
 				$scope.$apply();
 			}
 
@@ -38,6 +42,7 @@ angular.module("ConfiguratorApp", [ "ngMaterial", "Key", "Layouts" ])
 		$scope.output = function() {
 			var ori_settings = keyboardDataService.get_ori_settings();
 			var custom_settings = keyboardDataService.get_custom_settings();
+			var mouse_settings = keyboardDataService.get_mouse_settings();
 
 			$scope.map_table = "uint8_t map_table[102] = { ";
 			for(var i = 0; i <= 101; ++i) {
@@ -60,7 +65,7 @@ angular.module("ConfiguratorApp", [ "ngMaterial", "Key", "Layouts" ])
 			var content = "data:text/csv;charset=utf-8,";
 			var link = document.createElement("a");
 			link.setAttribute("download",  "keyboard_configure.dat");
-			content += angular.toJson(custom_settings);
+			content += angular.toJson({ keyboard: custom_settings, mouse: mouse_settings });
 			var encodedUri = encodeURI(content);
 			link.setAttribute("href", encodedUri);
 			link.click();
@@ -72,6 +77,5 @@ angular.module("ConfiguratorApp", [ "ngMaterial", "Key", "Layouts" ])
 
 		$scope.unselect_all = function() {
 			$scope.$broadcast("unselect");
-			console.log("hre");
 		}
 	})
