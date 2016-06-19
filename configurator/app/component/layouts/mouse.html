@@ -1,6 +1,25 @@
 <div layout="row" layout-align="center center">
 	<div class="layout-padding">
-		mouse precisions
+		<div layout="column">
+			<div layout="column" layout-align="center center">
+				<p>Mouse Mode Switch Key</p>
+				<key key-obj="mouse_settings.switch_key"></key>
+			</div>
+			<md-list>
+				<md-subheader>Mouse Move Precision Setting Pairs</md-subheader>
+					<md-list-item class="md-3-line" ng-repeat="precision_pair in mouse_settings.precisions">
+						<key key-obj="precision_pair.key"></key>
+						<md-input-container>
+							<label>Pixel</label>
+							<input ng-model="precision_pair.pixels">
+						</md-input-container>
+						<md-button class="md-raised md-warn" ng-click="remove_pair(precision_pair)">Delete</md-button>
+					</md-list-item>
+					<md-list-item class="md-3-line">
+						<md-button class="md-raised md-primary" ng-click="add_one_pair()">Add Setting Pair</md-button>
+					</md-list-item>
+			</md-list>
+		</div>
 	</div>
 	<div flex="nogrow" layout="column" class="layout-padding">
 		<div flex layout="column" layout-align="center center">

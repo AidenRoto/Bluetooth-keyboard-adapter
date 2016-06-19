@@ -29,6 +29,15 @@ angular.module("Layouts", [ "ngMaterial", "Key" ])
 				$scope.$on("selectEvnt", function(e, keyObj) {
 					$scope.$broadcast("unselect");
 				})
+
+				$scope.add_one_pair = function() {
+					$scope.mouse_settings.precisions.push({});
+				}
+
+				$scope.remove_pair = function(pair) {
+					var idx = $scope.mouse_settings.precisions.indexOf(pair);
+					$scope.mouse_settings.precisions.splice(idx, 1);
+				}
 			}
 		}
 	})

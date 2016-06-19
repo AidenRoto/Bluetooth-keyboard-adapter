@@ -297,7 +297,7 @@ angular.module("Key", ["ngMaterial"])
 				key_data["ArrowRight"]
 			],
 			precisions: [
-				[ key_data["KeyF"], 15 ]
+				{ key: key_data["KeyF"], pixels: 15 },
 			]
 		};
 
