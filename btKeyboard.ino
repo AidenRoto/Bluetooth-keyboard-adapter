@@ -122,8 +122,7 @@ void BtKeyboardParser::modify_to_consumer_report(uint8_t buf[], uint8_t report_c
 void BtKeyboardParser::modify_to_mouse(uint8_t buf[]) {
   buf[0] = 0;
   buf[1] = 3;
-  bool x_move = false;
-  bool y_move = false;
+  bool x_left = false, x_right = false, y_up = false, y_down = false;
   bool button_action = false;
   uint8_t move_pixels = defult_mouse_move_pixels;
 
@@ -154,20 +153,16 @@ void BtKeyboardParser::modify_to_mouse(uint8_t buf[]) {
       if(buf[j] == mouse_actions[i]) {
         switch(i) {
           case 2:
-            buf[4] = (-1) * move_pixels;
-            y_move = true;
+            y_up = true;
             break;
           case 3:
-            buf[4] = move_pixels;
-            y_move = true;
+            y_down = true;
             break;
           case 4:
-            buf[3] = (-1) * move_pixels;
-            x_move = true;
+            x_left = true;
             break;
           case 5:
-            buf[3] = move_pixels;
-            x_move = true;
+            x_right = true;
             break;
         }
       }
@@ -175,8 +170,20 @@ void BtKeyboardParser::modify_to_mouse(uint8_t buf[]) {
   }
 
   if(!button_action) buf[2] = 0;
-  if(!x_move) buf[3] = 0;
-  if(!y_move) buf[4] = 0;
+  if(!x_left && !x_right) {
+    buf[3] = 0;
+  } else if(x_left) {
+    buf[3] = (-1) * move_pixels;
+  } else {
+    buf[3] = move_pixels;
+  }
+  if(!y_up && !y_down)  {
+    buf[4] = 0;
+  } else if(y_up) {
+    buf[4] = (-1) * move_pixels;
+  } else {
+    buf[4] = move_pixels;
+  }
 
   buf[5] = buf[6] = buf[7] = 0;
 
